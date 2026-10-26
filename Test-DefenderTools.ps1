@@ -47,3 +47,20 @@ Set-StrictMode -Version Latest
     if ($r.Status -ne 'PendingRestart' -or -not $r.RestartRequired) { throw 'Restart status was lost.' }
 }
 Write-Host 'PASS: 7 OS fixtures, client guard, WhatIf, removal, absent feature and pending restart (all mocked).' -ForegroundColor Green
+
+& {
+    function Get-DefenderPlatform { [pscustomobject]@{ Caption='Server'; Family='Windows Server'; Build=20348; Edition='ServerStandard'; LTSC=$false; Supported=$true; Reason='Test' } }
+    function Show-DebloatBanner { }
+    function Clear-Host { }
+    function Write-Host { param($Object,$ForegroundColor) }
+    foreach ($case in @(@('y',1),@(' Y ',1),@('n',0),@('',0),@('DELETE',0))) {
+        $queue=New-Object 'System.Collections.Generic.Queue[string]'
+        foreach ($line in @('S',[string]$case[0],'')) { $queue.Enqueue($line) }
+        $script:confirmationCalls=0
+        function Read-Host { param($Prompt) if (-not $queue.Count) { throw 'Unexpected confirmation prompt' }; $queue.Dequeue() }
+        function Invoke-DefenderFeatureRemoval { $script:confirmationCalls++ }
+        Show-DefenderMenu
+        if ($script:confirmationCalls -ne $case[1] -or $queue.Count) { throw "y/n confirmation failed: '$($case[0])'" }
+    }
+}
+Write-Host 'PASS: Defender y/Y acceptance, n/Enter cancellation and invalid answer rejection (mocked).' -ForegroundColor Green

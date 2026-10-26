@@ -26,7 +26,7 @@ Test-RemovalAssets -Root $root
 . (Join-Path $root 'Debloat.Menu.ps1')
 & {
     $queue=New-Object 'System.Collections.Generic.Queue[string]'
-    foreach ($line in @('E','cancel','')) { $queue.Enqueue($line) }
+    foreach ($line in @('E','n','')) { $queue.Enqueue($line) }
     function Read-Host { param($Prompt) if (-not $queue.Count) { throw 'Unexpected prompt' }; $queue.Dequeue() }
     function Write-Host { param($Object,$ForegroundColor) }
     function Clear-Host { }

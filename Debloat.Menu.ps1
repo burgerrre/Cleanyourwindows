@@ -139,7 +139,7 @@ function Show-DebloatMenu([object[]]$Catalog, [string[]]$PresentIds) {
                 if ($command -ieq 'P') { Read-Host "`n  Enter: вернуться в меню" | Out-Null; continue }
                 Write-Host "`n  Удаление затронет все учётные записи и пакеты для новых пользователей." -ForegroundColor Yellow
                 Write-Host '  Закрой удаляемые программы. Может потребоваться перезагрузка.' -ForegroundColor Yellow
-                if ((Read-Host '  Для запуска введи DELETE; Enter = назад') -ceq 'DELETE') {
+                if ((Read-Host '  Удалить выбранное? [y/N]').Trim() -ieq 'y') {
                     return [pscustomobject]@{ Ids = @($chosen.Id) }
                 }
                 $message = 'Удаление отменено. Выбор сохранён.'

@@ -72,7 +72,7 @@ function Show-DefenderMenu {
             Write-Host '  Также меняются VBS, mitigation-политики и связанные защитные компоненты из исходника.'
             Write-Host '  Операция необратима без резервной копии/переустановки. Сделай образ системы.'
             Write-Host '  Автоперезагрузки нет. LTSC 2019/2021 допускаются, но на них не выполнен runtime-тест.'
-            if ((Read-Host '  Для запуска введи REMOVE SECURITY') -ceq 'REMOVE SECURITY') {
+            if ((Read-Host '  Запустить экспериментальное удаление? [y/N]').Trim() -ieq 'y') {
                 & (Join-Path $PSScriptRoot 'Experimental.SecurityRemoval.ps1') -Apply
             }
             return
@@ -86,7 +86,7 @@ function Show-DefenderMenu {
         Write-Host '  Будет удалён встроенный антивирус и файлы серверного компонента.' -ForegroundColor Yellow
         Write-Host '  Для восстановления может понадобиться источник установки Windows Server.'
         Write-Host '  Автоматической перезагрузки не будет. После удаления защита Defender недоступна.'
-        if ((Read-Host "`n  Введи REMOVE DEFENDER для удаления; Enter = назад") -cne 'REMOVE DEFENDER') { return }
+        if ((Read-Host "`n  Удалить Defender? [y/N]").Trim() -ine 'y') { return }
         $result = Invoke-DefenderFeatureRemoval
         if ($null -eq $result) { return }
         $reportPath = Join-Path $PSScriptRoot ('defender-report-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff') + '.json')

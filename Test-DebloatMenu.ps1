@@ -27,18 +27,18 @@ function Invoke-MenuScenario([string[]]$Inputs, [string[]]$Present) {
     if ($queue.Count -ne 0) { throw 'Menu returned before consuming scenario.' }
     return $answer
 }
-$answer = Invoke-MenuScenario @('1 3','P','','D','DELETE') @('edge','copilot')
+$answer = Invoke-MenuScenario @('1 3','P','','D','y') @('edge','copilot')
 if (($answer.Ids -join ',') -ne 'edge,copilot') { throw 'Preview changed the selection.' }
-$answer = Invoke-MenuScenario @('A','N','D','3','D','','D','DELETE') @('edge','copilot')
+$answer = Invoke-MenuScenario @('A','N','D','3','D','','D','y') @('edge','copilot')
 if (($answer.Ids -join ',') -ne 'copilot') { throw 'Clear/cancel behavior failed.' }
-$answer = Invoke-MenuScenario @('1 3','1','D','DELETE') @('edge','copilot')
+$answer = Invoke-MenuScenario @('1 3','1','D',' Y ') @('edge','copilot')
 if (($answer.Ids -join ',') -ne 'copilot') { throw 'Toggle behavior failed.' }
-$answer = Invoke-MenuScenario @('2','D','A','D','DELETE') @('edge')
+$answer = Invoke-MenuScenario @('2','D','A','D','y') @('edge')
 if (($answer.Ids -join ',') -ne 'edge') { throw 'Absent application could be selected.' }
 $answer = Invoke-MenuScenario @('A','Q') @('edge')
 if ($null -ne $answer) { throw 'Quit returned a removal selection.' }
-$answer = Invoke-MenuScenario @('A','D','delete','Q') @('edge')
-if ($null -ne $answer) { throw 'Confirmation was not exact.' }
+$answer = Invoke-MenuScenario @('A','D','n','Q') @('edge')
+if ($null -ne $answer) { throw 'Negative confirmation was accepted.' }
 Write-Host 'PASS: catalog, input validation and 6 interactive scenarios. No uninstall operations executed.' -ForegroundColor Green
 
 # Mock activation entry points: tests never change the license.

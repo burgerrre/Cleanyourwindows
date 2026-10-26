@@ -1,4 +1,4 @@
-{
+﻿{
   "Upstream": "https://github.com/ionuttbara/windows-defender-remover",
   "Revision": "6126092a5376753153295a20806ebd2f5f3e1c0e",
   "Files": [
@@ -88,7 +88,7 @@
     },
     {
       "Path": "Defender.Tools.ps1",
-      "SHA256": "D8D8DD254CE21A331553DB3DDBA6121593DD2613C20AC44EEBEBAFF547EA1451"
+      "SHA256": "45D4A73163BA5D32BF5FD3C729A1CFDAFF0F9305B13FA9945F8987B4A1F611F6"
     }
   ]
 }
