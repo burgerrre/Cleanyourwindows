@@ -1,5 +1,31 @@
 ﻿# Windows Debloat Deletor
 
+## Тестовая ветка `test/defender`
+
+`X` открывает экспериментальный раздел Defender. Определяются Windows 10,
+Windows 11, Windows Server и клиентские LTSC/LTSB (включая IoT LTSC).
+LTSC определяется отдельно от семейства ОС; сервер определяется по ProductType,
+а Windows 10/11 — по номеру сборки.
+
+На Windows Server 2016+ при наличии ServerManager можно удалить установленные
+компоненты `Windows-Defender` / `Windows-Defender-Gui` через
+`Uninstall-WindowsFeature -Remove`. Состояние перепроверяется после операции;
+результат сохраняется в `defender-report-*.json`. Перезагрузка автоматически
+не запускается. При её необходимости результат — `PendingRestart`.
+Для восстановления удалённого компонента может понадобиться установочный
+источник соответствующей версии Windows Server.
+
+**На Windows 10/11, включая LTSC, удаление встроенного Defender этим скриптом
+не реализовано**: раздел сообщает о недоступности штатной деинсталляции.
+Пункт `X` не включается в «выбрать всё» и требует отдельного подтверждения
+`REMOVE DEFENDER`. Основной список удаления по-прежнему не затрагивает Defender.
+
+Основание: [Microsoft — совместимость Defender и удаление на Server](https://learn.microsoft.com/en-us/defender-endpoint/microsoft-defender-antivirus-compatibility).
+Функция проверена на моках; настоящее удаление на Windows Server не проверялось.
+Тесты: `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Test-DefenderTools.ps1`.
+
+## Основной скрипт
+
 Скрипт для **Windows PowerShell 5.1 от имени администратора** в Windows 10/11.
 Удаление на компьютере автора при подготовке скрипта не запускалось.
 

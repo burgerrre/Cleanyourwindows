@@ -1,4 +1,6 @@
 ﻿# Console UI and explicit package catalogue. No uninstall operations in this file.
+. (Join-Path $PSScriptRoot 'Defender.Tools.ps1')
+
 function Invoke-WindowsLicenseTool {
     param([ValidateSet('/dli','/xpr','/ato')][string]$Option)
     $hostPath = Join-Path $env:SystemRoot 'System32\cscript.exe'
@@ -119,12 +121,14 @@ function Show-DebloatMenu([object[]]$Catalog, [string[]]$PresentIds) {
         Write-Host '  A = выбрать найденное   N = снять всё   P = план' -ForegroundColor White
         Write-Host '  D = удалить выбранное  Q = выход' -ForegroundColor White
         Write-Host '  W = активация Windows' -ForegroundColor Cyan
+        Write-Host '  X = Defender / тестовая функция (отдельно от списка)' -ForegroundColor Yellow
         if ($message) { Write-Host "`n  $message" -ForegroundColor Yellow }
         $command = (Read-Host "`n  Команда").Trim()
         $message = ''
         switch ($command.ToUpperInvariant()) {
             'Q' { return $null }
             'W' { Show-WindowsActivationMenu; continue }
+            'X' { Show-DefenderMenu; continue }
             'A' { foreach ($item in $Catalog) { if ($item.Id -in $PresentIds) { $selected[$item.Id] = $true } }; continue }
             'N' { $selected.Clear(); continue }
             { $_ -in @('D','P') } {
