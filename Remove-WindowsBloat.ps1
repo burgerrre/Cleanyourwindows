@@ -107,13 +107,19 @@ function Invoke-RegisteredUninstall($Entry) {
     Add-Result $Entry.DisplayName 'Uninstaller' 'StartedAndExited' "Exit code $($process.ExitCode); inventory verification follows."
 }
 
+$interactiveMode = -not $Apply -and -not $Preview -and -not $WhatIfPreference
+do {
+# Each interactive pass gets a fresh inventory, selection and report.
+$script:Results.Clear()
+$script:RebootRequired = $false
+$selectedIds = @($catalog.Id)
 $before = [IO.DriveInfo]::new($env:SystemDrive + '\').AvailableFreeSpace
 Show-DebloatBanner
 Write-Host '  Сканирование установленных приложений...' -ForegroundColor Cyan
 $allInstalled = @(Get-AppxPackage -AllUsers)
 $allProvisioned = @(Get-AppxProvisionedPackage -Online)
 $allRegistered = @(Get-RegisteredTargets)
-if (-not $Apply -and -not $Preview -and -not $WhatIfPreference) {
+if ($interactiveMode) {
     $presentIds = @(foreach ($item in $catalog) {
         $found = @($allInstalled | Where-Object { $_.Name -in $item.Packages }).Count -gt 0
         $found = $found -or (@($allProvisioned | Where-Object { $_.DisplayName -in $item.Packages }).Count -gt 0)
@@ -201,3 +207,8 @@ if ($Apply -and -not $WhatIfPreference) {
     Write-Host 'If Edge remains, Windows may block its removal. WebView2 is a separate shared runtime.'
     Write-Host "Reboot requested by uninstallers: $script:RebootRequired"
 }
+if ($interactiveMode) {
+    Write-Host "`n  Удаление завершено. Повторное сканирование и возврат в меню через 4 секунды..." -ForegroundColor Cyan
+    Start-Sleep -Seconds 4
+}
+} while ($interactiveMode)
