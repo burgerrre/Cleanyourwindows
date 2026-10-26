@@ -27,7 +27,6 @@ EXE и включённый сторонний PowerRun не имеют цифр
 | `1 3 8` | Поставить/снять отметки у групп приложений |
 | `A` / `N` | Выбрать всё найденное / снять выбор |
 | `P` / `D` | Просмотр выбранного / удаление |
-| `W` | Активация Windows действующей лицензией |
 | `X` | Defender, Windows Security, UAC и SmartScreen |
 | `Q` | Выход |
 
@@ -38,8 +37,6 @@ EXE и включённый сторонний PowerRun не имеют цифр
 В список входят Edge, Microsoft 365 (включая Word/Excel/PowerPoint из подписки),
 Copilot, Xbox/Game Bar, Clipchamp, Teams, Phone Link и другие указанные приложения.
 Windows может запретить удаление Edge. Общий компонент WebView2 сохраняется.
-`W` использует штатные средства Windows; ключ вводится в параметрах Windows
-и не сохраняется скриптом.
 
 ### Раздел X
 
@@ -77,11 +74,10 @@ The EXE extracts its bundled files to
 Extraction does not require internet access. The EXE and bundled PowerRun are unsigned.
 
 Type numbers such as `1 3 8` to toggle groups. `A` selects installed groups,
-`N` clears selection, `P` previews, `D` removes, `W` opens Windows activation,
+`N` clears selection, `P` previews, `D` removes,
 `X` opens security component management, and `Q` exits. The app menu rescans
 and reopens four seconds after removal. Personal documents and browser profiles
 are preserved. Edge removal may be blocked by Windows; WebView2 is preserved.
-Activation requires a valid license; keys are entered in Windows Settings.
 
 ### Security component management
 

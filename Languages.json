@@ -60,11 +60,6 @@
     "EnglishFirst": false
   },
   {
-    "RU": "W = активация Windows",
-    "EN": "W = Windows activation",
-    "EnglishFirst": false
-  },
-  {
     "RU": "(отдельно от списка)",
     "EN": "(separate from app selection)",
     "EnglishFirst": false
@@ -127,81 +122,6 @@
   {
     "RU": "' вне списка 1..",
     "EN": "' is outside the range 1..",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "АКТИВАЦИЯ WINDOWS",
-    "EN": "WINDOWS ACTIVATION",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "1 = статус лицензии и срок активации",
-    "EN": "1 = license status and activation expiry",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "2 = ввести свой ключ / открыть параметры активации",
-    "EN": "2 = enter your key / open activation settings",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "3 = активировать с установленным ключом или цифровой лицензией",
-    "EN": "3 = activate using the installed key or digital license",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "Q = назад в меню удаления",
-    "EN": "Q = return to app removal",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "Нужна действующая лицензия этой редакции Windows.",
-    "EN": "A valid license for this Windows edition is required.",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "В параметрах выбери изменение ключа продукта или устранение неполадок.",
-    "EN": "In Settings, choose Change product key or Troubleshoot.",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "Ключ вводится в окне Windows и не сохраняется скриптом.",
-    "EN": "Enter the key in Windows Settings. This script does not store it.",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "Запуск активации. Дождись ответа службы лицензирования...",
-    "EN": "Starting activation. Wait for the licensing service...",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "Проверка фактического состояния лицензии:",
-    "EN": "Checking the actual license state:",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "Выбери 1, 2, 3 или Q.",
-    "EN": "Choose 1, 2, 3 or Q.",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "Enter: вернуться к активации",
-    "EN": "Enter: return to activation",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "Не найден штатный инструмент управления лицензией Windows.",
-    "EN": "The Windows licensing tool was not found.",
-    "EnglishFirst": false
-  },
-  {
-    "RU": "Команда завершилась с кодом ",
-    "EN": "Command exited with code ",
-    "EnglishFirst": false
-  },
-  {
-    "RU": ". Проверь сообщение Windows.",
-    "EN": ". Check the Windows message.",
     "EnglishFirst": false
   },
   {
