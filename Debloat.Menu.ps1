@@ -1,6 +1,7 @@
 ﻿# Console UI and explicit package catalogue. No uninstall operations in this file.
 . (Join-Path $PSScriptRoot 'Defender.Tools.ps1')
 . (Join-Path $PSScriptRoot 'Localization.ps1')
+. (Join-Path $PSScriptRoot 'Install.Apps.ps1')
 
 
 
@@ -83,12 +84,14 @@ function Show-DebloatMenu([object[]]$Catalog, [string[]]$PresentIds) {
         Write-Ui '  Номера: переключить выбор (например 1 3 8)' -ForegroundColor White
         Write-Ui '  A = выбрать найденное   N = снять всё   P = план' -ForegroundColor White
         Write-Ui '  D = удалить выбранное  Q = выход' -ForegroundColor White
+        Write-Ui '  I = установка программ' -ForegroundColor Cyan
         Write-Ui '  X = Defender / UAC / SmartScreen (отдельно от списка)' -ForegroundColor Yellow
         if ($message) { Write-Ui "`n  $message" -ForegroundColor Yellow }
         $command = (Read-Ui "`n  Команда").Trim()
         $message = ''
         switch ($command.ToUpperInvariant()) {
             'Q' { return $null }
+            'I' { Show-AppInstallMenu; continue }
             'X' { Show-DefenderMenu; continue }
             'A' { foreach ($item in $Catalog) { if ($item.Id -in $PresentIds) { $selected[$item.Id] = $true } }; continue }
             'N' { $selected.Clear(); continue }

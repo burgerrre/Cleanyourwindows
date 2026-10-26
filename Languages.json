@@ -1,32 +1,32 @@
 ﻿[
   {
     "RU": "Выбери приложения. Проверь список. Удали лишнее.",
-    "EN": "Choose apps. Review your selection. Remove what you do not need.",
+    "EN": "Choose the apps to uninstall, review your selection, then confirm.",
     "EnglishFirst": false
   },
   {
     "RU": "Личные файлы / Store / Defender / WebView2 сохраняются.",
-    "EN": "App removal preserves personal files / Store / Defender / WebView2.",
+    "EN": "App uninstall preserves personal files, Microsoft Store, Defender and WebView2.",
     "EnglishFirst": false
   },
   {
     "RU": "ВЫБОР  ПРИЛОЖЕНИЕ                         НАЛИЧИЕ",
-    "EN": "SELECT APPLICATION                         STATUS",
+    "EN": "SELECT APP                                 STATUS",
     "EnglishFirst": false
   },
   {
     "RU": "не найдено",
-    "EN": "not found",
+    "EN": "not detected",
     "EnglishFirst": false
   },
   {
     "RU": "найдено",
-    "EN": "found",
+    "EN": "detected",
     "EnglishFirst": false
   },
   {
     "RU": "Выбрано групп:",
-    "EN": "Selected groups:",
+    "EN": "Selected app groups:",
     "EnglishFirst": false
   },
   {
@@ -46,17 +46,17 @@
   },
   {
     "RU": "Номера: переключить выбор (например 1 3 8)",
-    "EN": "Numbers: toggle selection (example: 1 3 8)",
+    "EN": "Enter numbers to select or deselect apps (for example, 1 3 8)",
     "EnglishFirst": false
   },
   {
     "RU": "A = выбрать найденное   N = снять всё   P = план",
-    "EN": "A = select found apps   N = clear selection   P = preview",
+    "EN": "A = select detected apps   N = clear selection   P = review selection",
     "EnglishFirst": false
   },
   {
     "RU": "D = удалить выбранное  Q = выход",
-    "EN": "D = remove selected   Q = quit",
+    "EN": "D = uninstall selected apps   Q = quit",
     "EnglishFirst": false
   },
   {
@@ -66,47 +66,47 @@
   },
   {
     "RU": "Команда",
-    "EN": "Command",
+    "EN": "Your choice",
     "EnglishFirst": false
   },
   {
     "RU": "Сначала выбери хотя бы одно найденное приложение.",
-    "EN": "Select at least one installed application first.",
+    "EN": "Select at least one detected app first.",
     "EnglishFirst": false
   },
   {
     "RU": "ВЫБРАННЫЙ СПИСОК:",
-    "EN": "SELECTED APPLICATIONS:",
+    "EN": "SELECTED APPS:",
     "EnglishFirst": false
   },
   {
     "RU": "Enter: вернуться в меню",
-    "EN": "Enter: return to menu",
+    "EN": "Press Enter to return to the menu",
     "EnglishFirst": false
   },
   {
     "RU": "Удаление затронет все учётные записи и пакеты для новых пользователей.",
-    "EN": "Removal affects all accounts and packages provisioned for new users.",
+    "EN": "Uninstall affects all user accounts and apps provisioned for new accounts.",
     "EnglishFirst": false
   },
   {
     "RU": "Закрой удаляемые программы. Может потребоваться перезагрузка.",
-    "EN": "Close the selected apps. A restart may be required.",
+    "EN": "Close the selected apps before continuing. A restart may be required.",
     "EnglishFirst": false
   },
   {
     "RU": "Удалить выбранное? [y/N]",
-    "EN": "Remove selected apps? [y/N]",
+    "EN": "Uninstall the selected apps? [y/N]",
     "EnglishFirst": false
   },
   {
     "RU": "Удаление отменено. Выбор сохранён.",
-    "EN": "Removal cancelled. Selection preserved.",
+    "EN": "Uninstall cancelled. Your selection has been kept.",
     "EnglishFirst": false
   },
   {
     "RU": "Не найденные приложения пропущены.",
-    "EN": "Applications that were not found were skipped.",
+    "EN": "Apps that were not detected have been skipped.",
     "EnglishFirst": false
   },
   {
@@ -251,7 +251,7 @@
   },
   {
     "RU": "Перезагрузка выполняется вручную. Результат будет сохранён в отчёт.",
-    "EN": "Restart manually. The result will be saved to a report.",
+    "EN": "Restart Windows manually afterwards. Results will be saved to a report.",
     "EnglishFirst": false
   },
   {
@@ -331,12 +331,12 @@
   },
   {
     "RU": "Выход. Ничего не удалено.",
-    "EN": "Exiting. Nothing was removed.",
+    "EN": "Exiting without uninstalling any apps.",
     "EnglishFirst": false
   },
   {
     "RU": "Удаление завершено. Повторное сканирование и возврат в меню через 4 секунды...",
-    "EN": "Removal finished. Rescanning and returning to the menu in 4 seconds...",
+    "EN": "Uninstall finished. Refreshing the app list in 4 seconds...",
     "EnglishFirst": false
   },
   {
@@ -488,5 +488,10 @@
     "RU": "Для удаления защитных компонентов нужна 64-разрядная Windows.",
     "EN": "Security removal requires 64-bit Windows.",
     "EnglishFirst": true
+  },
+  {
+    "RU": "I = установка программ",
+    "EN": "I = install applications",
+    "EnglishFirst": false
   }
 ]

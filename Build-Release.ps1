@@ -14,7 +14,7 @@ $manifest | ConvertTo-Json -Depth 4 | ForEach-Object {
     [IO.File]::WriteAllText($manifestPath, $_.Replace("`r`n","`n"),[Text.UTF8Encoding]::new($true))
 }
 $names=@('Start-Debloat.ps1','Remove-WindowsBloat.ps1','Debloat.Menu.ps1','Defender.Tools.ps1',
-    'Experimental.SecurityRemoval.ps1','Localization.ps1','Languages.json','START.cmd','README.md','LICENSE','third_party')
+    'Experimental.SecurityRemoval.ps1','Localization.ps1','Languages.json','Install.Apps.ps1','Install.Catalog.json','Install.Strings.json','START.cmd','README.md','LICENSE','third_party')
 $zip=Join-Path $output 'Cleanyourwindows-Portable.zip'
 Compress-Archive -LiteralPath @($names | ForEach-Object { Join-Path $root $_ }) -DestinationPath $zip -Force
 $compiler=Join-Path $env:SystemRoot 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'

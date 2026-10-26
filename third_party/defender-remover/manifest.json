@@ -1,102 +1,102 @@
 ﻿{
-  "Upstream": "https://github.com/ionuttbara/windows-defender-remover",
-  "Revision": "6126092a5376753153295a20806ebd2f5f3e1c0e",
-  "Files": [
-    {
-      "Path": "third_party/defender-remover/LICENSE",
-      "SHA256": "0F8FAAA16CCD0EAE090F22A4511AA260693FC0E23DBC055C10B5DEAE6BC45D42"
-    },
-    {
-      "Path": "third_party/defender-remover/NOTICE.md",
-      "SHA256": "1E8D8C1738B8B44F5ACDB02733E47DD967F085F5B2E79E2EE03A841E3B9C5A7E"
-    },
-    {
-      "Path": "third_party/defender-remover/PowerRun.exe",
-      "SHA256": "A6FA768C4964C328C748558627C20C2BA455E589A1B87CFA3911D197DA1688D2"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/Disable Mitigation.reg",
-      "SHA256": "60421BF96DC068BC7321905A0DA5A29413E6483DC516330CA7329FF166A6084B"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/Disable SmartScreen.reg",
-      "SHA256": "8BB02EDC6439C86DF129E788F9E7FE040495C53D20F20CBC02000652FFE937BD"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/DisableAntivirusProtection.reg",
-      "SHA256": "7DD902C8362F1388F368E88B943F9B8E54B18A29285DFB9B722BC9E430392FC8"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/DisableDefenderandSecurityCenterNotifications.reg",
-      "SHA256": "C12FA69A11F6B935D127295336B053A3A7BF3277B81BF9092E978B1420FA3BC3"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/DisableDefenderPolicies.reg",
-      "SHA256": "99FDAAAF838C00099E5BEADD4725BE22CDC4687F2ADED7670FA12BC95F888409"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/README.md",
-      "SHA256": "4E3D6D31A1B210944D7D3D607BFF10814757CA1681D8106838584868F82B7450"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/RemovalofWindowsDefenderAntivirus.reg",
-      "SHA256": "DE5D76C4C1BE4B15FF011C46E4FF3101F5FFD3AC7EE8BAB00753FEAAE208F75C"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/RemoveDefenderTasks.reg",
-      "SHA256": "8143FEEB32A4EDBD649CE033A551F878360603AA248FAF82D01C1F292CF49A4C"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/RemoverofDefenderContextMenu.reg",
-      "SHA256": "83F076D81891A2079197344DD5971FC419A56D7C4263B1F17ED31C73AA026DCB"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/RemoveServices.reg",
-      "SHA256": "E33D4BEC7DCEF61748BF7D928A3AB0CD00CCB73711F33AD895BA93914D34D5B4"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/RemoveShellAssociation.reg",
-      "SHA256": "778AA04D6A9395D77E16AB8B3D20B97ED459E4E06D87A051AB33DD3F090901E8"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/RemoveSignatureUpdates.reg",
-      "SHA256": "F658B566041CC2B9B56AC864DC09FCB285D4F6CFF3CA071976887627DF3645A4"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/RemoveStartupEntries.reg",
-      "SHA256": "399CC50172FDC71CCF5124C06D5DDF612AC4640AFCDB217477E720EEC5EC9EB7"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/RemoveWindowsWebThreat.reg",
-      "SHA256": "008460A4E27986C6C5BC0F52209F6D1628F08E1D1DE114A06FDFB386770B9650"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_Defender/WindowsSettingsPageVisibility.reg",
-      "SHA256": "0A15B7D475151AADC61044CA446A48179B4DFE68355C8B07256CEF9E45E42B0A"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_SecurityComp/README.md",
-      "SHA256": "5C3584DCF51335C29FE5E42F60E0E69D30E69FA421A4944E6056BE1249E021D4"
-    },
-    {
-      "Path": "third_party/defender-remover/Remove_SecurityComp/Remove_SecurityComp.reg",
-      "SHA256": "AF00BCEF63871E71A90827FA0664647C5FCD66BFF5F921CD8055D2D8C6E04DFD"
-    },
-    {
-      "Path": "Experimental.SecurityRemoval.ps1",
-      "SHA256": "6D229843B6100DE7669DAF4E9BF3F7AC13B84BF1C12FAFA3D9677872AAD75790"
-    },
-    {
-      "Path": "Defender.Tools.ps1",
-      "SHA256": "28E96EDB0FD5300DDB18675EC545FD00E1DE34336649EB05135E767D96E1AF37"
-    },
-    {
-      "Path": "Localization.ps1",
-      "SHA256": "FAE9FB2BDFDBC5BBBB8158DB9FAD45B4D92DDBFCF567CBC0792AD6CF3909B3E3"
-    },
-    {
-      "Path": "Languages.json",
-      "SHA256": "A12CA430F4EF93044E36D3B208E73CCD76B98F7E3A85BCDD431FEE3A00F5FF5D"
-    }
-  ]
+    "Upstream":  "https://github.com/ionuttbara/windows-defender-remover",
+    "Revision":  "6126092a5376753153295a20806ebd2f5f3e1c0e",
+    "Files":  [
+                  {
+                      "Path":  "third_party/defender-remover/LICENSE",
+                      "SHA256":  "0F8FAAA16CCD0EAE090F22A4511AA260693FC0E23DBC055C10B5DEAE6BC45D42"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/NOTICE.md",
+                      "SHA256":  "1E8D8C1738B8B44F5ACDB02733E47DD967F085F5B2E79E2EE03A841E3B9C5A7E"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/PowerRun.exe",
+                      "SHA256":  "A6FA768C4964C328C748558627C20C2BA455E589A1B87CFA3911D197DA1688D2"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/Disable Mitigation.reg",
+                      "SHA256":  "60421BF96DC068BC7321905A0DA5A29413E6483DC516330CA7329FF166A6084B"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/Disable SmartScreen.reg",
+                      "SHA256":  "8BB02EDC6439C86DF129E788F9E7FE040495C53D20F20CBC02000652FFE937BD"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/DisableAntivirusProtection.reg",
+                      "SHA256":  "7DD902C8362F1388F368E88B943F9B8E54B18A29285DFB9B722BC9E430392FC8"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/DisableDefenderandSecurityCenterNotifications.reg",
+                      "SHA256":  "C12FA69A11F6B935D127295336B053A3A7BF3277B81BF9092E978B1420FA3BC3"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/DisableDefenderPolicies.reg",
+                      "SHA256":  "99FDAAAF838C00099E5BEADD4725BE22CDC4687F2ADED7670FA12BC95F888409"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/README.md",
+                      "SHA256":  "4E3D6D31A1B210944D7D3D607BFF10814757CA1681D8106838584868F82B7450"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/RemovalofWindowsDefenderAntivirus.reg",
+                      "SHA256":  "DE5D76C4C1BE4B15FF011C46E4FF3101F5FFD3AC7EE8BAB00753FEAAE208F75C"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/RemoveDefenderTasks.reg",
+                      "SHA256":  "8143FEEB32A4EDBD649CE033A551F878360603AA248FAF82D01C1F292CF49A4C"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/RemoverofDefenderContextMenu.reg",
+                      "SHA256":  "83F076D81891A2079197344DD5971FC419A56D7C4263B1F17ED31C73AA026DCB"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/RemoveServices.reg",
+                      "SHA256":  "E33D4BEC7DCEF61748BF7D928A3AB0CD00CCB73711F33AD895BA93914D34D5B4"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/RemoveShellAssociation.reg",
+                      "SHA256":  "778AA04D6A9395D77E16AB8B3D20B97ED459E4E06D87A051AB33DD3F090901E8"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/RemoveSignatureUpdates.reg",
+                      "SHA256":  "F658B566041CC2B9B56AC864DC09FCB285D4F6CFF3CA071976887627DF3645A4"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/RemoveStartupEntries.reg",
+                      "SHA256":  "399CC50172FDC71CCF5124C06D5DDF612AC4640AFCDB217477E720EEC5EC9EB7"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/RemoveWindowsWebThreat.reg",
+                      "SHA256":  "008460A4E27986C6C5BC0F52209F6D1628F08E1D1DE114A06FDFB386770B9650"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_Defender/WindowsSettingsPageVisibility.reg",
+                      "SHA256":  "0A15B7D475151AADC61044CA446A48179B4DFE68355C8B07256CEF9E45E42B0A"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_SecurityComp/README.md",
+                      "SHA256":  "5C3584DCF51335C29FE5E42F60E0E69D30E69FA421A4944E6056BE1249E021D4"
+                  },
+                  {
+                      "Path":  "third_party/defender-remover/Remove_SecurityComp/Remove_SecurityComp.reg",
+                      "SHA256":  "AF00BCEF63871E71A90827FA0664647C5FCD66BFF5F921CD8055D2D8C6E04DFD"
+                  },
+                  {
+                      "Path":  "Experimental.SecurityRemoval.ps1",
+                      "SHA256":  "6D229843B6100DE7669DAF4E9BF3F7AC13B84BF1C12FAFA3D9677872AAD75790"
+                  },
+                  {
+                      "Path":  "Defender.Tools.ps1",
+                      "SHA256":  "28E96EDB0FD5300DDB18675EC545FD00E1DE34336649EB05135E767D96E1AF37"
+                  },
+                  {
+                      "Path":  "Localization.ps1",
+                      "SHA256":  "D5C7AFEF32789DA833274C5C99139905774057D922B4978D4E607E309BC6B012"
+                  },
+                  {
+                      "Path":  "Languages.json",
+                      "SHA256":  "0AFF58BD6C9CEBC22F4924CD0471129EB4DF8C8FE1FBED22719937A033B1B845"
+                  }
+              ]
 }

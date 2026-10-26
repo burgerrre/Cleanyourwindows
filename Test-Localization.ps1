@@ -29,7 +29,7 @@ try {
         }
     }
     Set-UiLanguage EN
-    if ((Get-UiText 'Удалить выбранное? [y/N]') -ne 'Remove selected apps? [y/N]') { throw 'Confirmation translation failed.' }
+    if ((Get-UiText 'Удалить выбранное? [y/N]') -ne 'Uninstall the selected apps? [y/N]') { throw 'Confirmation translation failed.' }
     Set-UiLanguage RU
     if ((Get-UiText 'Selected groups: edge') -ne 'Выбранные группы: edge') { throw 'Russian operation output failed.' }
 } finally { $env:DEBLOAT_LANGUAGE=$previousLanguage }

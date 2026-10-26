@@ -3,3 +3,5 @@ defender-report-*.json
 security-removal-*.json
 security-removal-*.json.tmp
 dist/
+install-report-*.json
+.test-artifacts/

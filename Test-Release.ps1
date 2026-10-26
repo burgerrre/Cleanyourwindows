@@ -8,10 +8,10 @@ $sha=[Security.Cryptography.SHA256]::Create()
 try { $actual=[BitConverter]::ToString($sha.ComputeHash($resource)).Replace('-','') }
 finally { $resource.Dispose(); $sha.Dispose() }
 if ($actual -ne (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash) { throw 'EXE embeds a different ZIP.' }
-Add-Type -AssemblyName System.IO.Compression.FileSystem
+Add-Type -AssemblyName System.IO.Compression,System.IO.Compression.FileSystem
 $archive=[IO.Compression.ZipFile]::OpenRead($zip)
 try {
-    foreach ($required in @('Start-Debloat.ps1','START.cmd','Localization.ps1','Languages.json','Experimental.SecurityRemoval.ps1','third_party/defender-remover/PowerRun.exe')) {
+    foreach ($required in @('Start-Debloat.ps1','START.cmd','Localization.ps1','Languages.json','Install.Apps.ps1','Install.Catalog.json','Install.Strings.json','Experimental.SecurityRemoval.ps1','third_party/defender-remover/PowerRun.exe')) {
         if (@($archive.Entries | Where-Object { $_.FullName.Replace('\','/') -eq $required }).Count -ne 1) { throw "Missing payload file: $required" }
     }
     $manifest=Get-Content -LiteralPath (Join-Path $PSScriptRoot 'third_party\defender-remover\manifest.json') -Raw | ConvertFrom-Json

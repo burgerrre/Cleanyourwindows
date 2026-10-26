@@ -1,0 +1,18 @@
+[
+  {"Id":"firefox","Name":"Mozilla Firefox","Provider":"Winget","PackageId":"Mozilla.Firefox","Source":"winget","NoteRU":"Браузер","NoteEN":"Web browser","Dependencies":[]},
+  {"Id":"vlc","Name":"VLC media player","Provider":"Winget","PackageId":"VideoLAN.VLC","Source":"winget","NoteRU":"Видео и музыка","NoteEN":"Video and audio player","Dependencies":[]},
+  {"Id":"obs","Name":"OBS Studio","Provider":"Winget","PackageId":"OBSProject.OBSStudio","Source":"winget","NoteRU":"Запись экрана и трансляции","NoteEN":"Screen recording and streaming","Dependencies":[]},
+  {"Id":"tgwsproxy","Name":"TG WS Proxy","Provider":"GitHubPortable","Repository":"Flowseal/tg-ws-proxy","AssetX64":"TgWsProxy_windows.exe","AssetArm64":"TgWsProxy_windows_arm64.exe","NoteRU":"Портативная версия; ярлык в меню Пуск","NoteEN":"Portable app with a Start menu shortcut","Dependencies":[]},
+  {"Id":"zapret","Name":"zapret-discord-youtube","Provider":"GitHubZip","Repository":"Flowseal/zapret-discord-youtube","AssetPattern":"^zapret-discord-youtube-.*\\.zip$","NoteRU":"Распаковка и ярлык настройки; стратегию выбираешь сам","NoteEN":"Extracts files and adds a setup shortcut; choose a strategy afterwards","Dependencies":[]},
+  {"Id":"discord","Name":"Discord","Provider":"Winget","PackageId":"Discord.Discord","Source":"winget","NoteRU":"Обычный Discord","NoteEN":"Official Discord desktop app","Dependencies":[]},
+  {"Id":"vencord","Name":"Vencord for Discord","Provider":"Vencord","Repository":"Vencord/Installer","AssetX64":"VencordInstallerCli.exe","AssetArm64":"VencordInstallerCli.exe","NoteRU":"Автоустановка в Discord Stable; Discord добавляется в очередь","NoteEN":"Installs into Discord Stable; adds Discord to the queue","Dependencies":["discord"]},
+  {"Id":"happ","Name":"Happ (Windows)","Provider":"GitHubSetup","Repository":"Happ-proxy/happ-desktop","AssetX64":"setup-Happ.x64.exe","AssetArm64":"setup-Happ.arm64.exe","NoteRU":"Откроется установщик Windows","NoteEN":"Opens the Windows setup wizard","Dependencies":[]},
+  {"Id":"7zip","Name":"7-Zip","Provider":"Winget","PackageId":"7zip.7zip","Source":"winget","NoteRU":"Архиватор","NoteEN":"File archiver","Dependencies":[]},
+  {"Id":"steam","Name":"Steam","Provider":"Winget","PackageId":"Valve.Steam","Source":"winget","NoteRU":"Игровой клиент","NoteEN":"Game client","Dependencies":[]},
+  {"Id":"prism","Name":"Prism Launcher","Provider":"Winget","PackageId":"PrismLauncher.PrismLauncher","Source":"winget","NoteRU":"Лаунчер Minecraft","NoteEN":"Minecraft launcher","Dependencies":[]},
+  {"Id":"codex","Name":"Codex / ChatGPT desktop","Provider":"Winget","PackageId":"9PLM9XGG6VKS","Source":"msstore","MinBuild":19041,"NoteRU":"Приложение OpenAI; нужен Microsoft Store","NoteEN":"OpenAI desktop app; requires Microsoft Store","Dependencies":[]},
+  {"Id":"antigravity","Name":"Google Antigravity","Provider":"Winget","PackageId":"Google.Antigravity","Source":"winget","NoteRU":"Приложение Google для работы с кодом","NoteEN":"Google's coding agent desktop app","Dependencies":[]},
+  {"Id":"claude","Name":"Claude Code","Provider":"Winget","PackageId":"Anthropic.ClaudeCode","Source":"winget","NoteRU":"Команда claude в терминале","NoteEN":"The claude command-line application","Dependencies":[]},
+  {"Id":"telegram","Name":"Telegram Desktop","Provider":"Winget","PackageId":"Telegram.TelegramDesktop","Source":"winget","NoteRU":"Официальный Telegram","NoteEN":"Official Telegram desktop app","Dependencies":[]},
+  {"Id":"codexcli","Name":"Codex CLI","Provider":"Winget","PackageId":"OpenAI.Codex","Source":"winget","NoteRU":"Отдельный Codex для терминала; подходит без Store","NoteEN":"Codex for the terminal; does not require Microsoft Store","Dependencies":[]}
+]

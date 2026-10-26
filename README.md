@@ -27,6 +27,7 @@ EXE и включённый сторонний PowerRun не имеют цифр
 | `1 3 8` | Поставить/снять отметки у групп приложений |
 | `A` / `N` | Выбрать всё найденное / снять выбор |
 | `P` / `D` | Просмотр выбранного / удаление |
+| `I` | Выбор и установка программ |
 | `X` | Defender, Windows Security, UAC и SmartScreen |
 | `Q` | Выход |
 
@@ -37,6 +38,49 @@ EXE и включённый сторонний PowerRun не имеют цифр
 В список входят Edge, Microsoft 365 (включая Word/Excel/PowerPoint из подписки),
 Copilot, Xbox/Game Bar, Clipchamp, Teams, Phone Link и другие указанные приложения.
 Windows может запретить удаление Edge. Общий компонент WebView2 сохраняется.
+
+### Установка программ — I
+
+Выбирай программы номерами. `A` выбирает все, `N` снимает выбор, `P` показывает
+очередь с зависимостями, `I` запускает установку после ответа `y`, `Q` возвращает
+в меню удаления. Устанавливается только выбранное и его зависимости. Ошибка
+одной установки не прерывает остальные. Результаты сохраняются в
+`install-report-*.json` в папке сеанса.
+
+Доступны Firefox, VLC, OBS Studio, TG WS Proxy, zapret, Discord, Vencord, Happ
+для Windows, 7-Zip, Steam, Prism Launcher, Codex / ChatGPT desktop,
+Google Antigravity, Claude Code, Telegram Desktop и отдельный Codex CLI.
+
+Обычные приложения ставятся через WinGet с точными идентификаторами пакетов.
+Уже установленные программы пропускаются. Если WinGet отсутствует, `B` устанавливает
+или восстанавливает его официальным модулем Microsoft.WinGet.Client из PSGallery.
+Потребуется интернет. Подтверждение установки означает принятие условий выбранных
+приложений и источников пакетов. Некоторые приложения требуют новую сборку Windows.
+Codex / ChatGPT desktop использует Microsoft Store и недоступен на системах без
+работающего Store; отдельный Codex CLI устанавливается через источник winget.
+
+TG WS Proxy, zapret и Happ скачиваются из последних стабильных релизов указанных
+репозиториев, а Vencord — из официального Vencord/Installer. Выбирается Windows-файл
+для архитектуры системы, проверяются размер и SHA-256 из GitHub Release API.
+Если контрольная сумма отсутствует или не совпала, запуск останавливается.
+
+Портативные TG WS Proxy и zapret размещаются в `%ProgramData%\Cleanyourwindows\Apps`
+с ярлыками в Пуск → Cleanyourwindows. Папка zapret при необходимости переносится
+в `%SystemDrive%\CleanyourwindowsApps`, чтобы путь не содержал кириллицу.
+У zapret нужно открыть ярлык настройки и выбрать рабочую стратегию; служба
+автоматически не создаётся. Vencord добавляет Discord Stable как зависимость
+и запускает официальный CLI-установщик с `-install -branch stable`; перед этим
+закрой Discord. Happ открывает штатный мастер установки Windows — его шаги
+нужно завершить самостоятельно. Это явно отмечено в списке и отчёте.
+
+Источники: [TG WS Proxy](https://github.com/Flowseal/tg-ws-proxy),
+[zapret](https://github.com/Flowseal/zapret-discord-youtube),
+[Happ](https://github.com/Happ-proxy/happ-desktop),
+[Vencord](https://vencord.dev/download/),
+[WinGet](https://learn.microsoft.com/en-us/windows/package-manager/winget/),
+[Codex / приложение OpenAI](https://learn.chatgpt.com/docs/windows/windows-app),
+[Claude Code](https://code.claude.com/docs/en/setup),
+[Google Antigravity](https://antigravity.google/download).
 
 ### Раздел X
 
@@ -55,7 +99,7 @@ Windows 11 и Server 2019+. Помимо Defender/UAC/SmartScreen применя
 Заблокированные файлы могут остаться; обновления Windows могут вернуть компоненты.
 Завершение процесса не доказывает полного удаления.
 
-Проверены синтаксис, меню, RU/EN, отмена, целостность и упаковка.
+Проверены синтаксис, меню, RU/EN, отмена, очередь установок, проверки загрузок, целостность и упаковка. Настоящая установка приложений не запускалась.
 Реальное удаление на LTSC 2019/2021 и работа EXE на этих системах не проверялись.
 
 ## English
@@ -75,9 +119,38 @@ Extraction does not require internet access. The EXE and bundled PowerRun are un
 
 Type numbers such as `1 3 8` to toggle groups. `A` selects installed groups,
 `N` clears selection, `P` previews, `D` removes,
-`X` opens security component management, and `Q` exits. The app menu rescans
+`I` opens the app installer, `X` manages security components, and `Q` exits. The app menu rescans
 and reopens four seconds after removal. Personal documents and browser profiles
 are preserved. Edge removal may be blocked by Windows; WebView2 is preserved.
+
+### Install applications — I
+
+Select apps by number. `A` selects all, `N` clears the selection, `P` reviews the
+queue, `I` starts installation after a `y` confirmation, and `Q` returns to the
+uninstall menu. Dependencies are listed before you confirm. A failed app does
+not stop the rest of the queue. Results are saved to `install-report-*.json`.
+
+The catalog includes Firefox, VLC, OBS Studio, TG WS Proxy, zapret, Discord,
+Vencord, Happ for Windows, 7-Zip, Steam, Prism Launcher, Codex / ChatGPT desktop,
+Google Antigravity, Claude Code, Telegram Desktop, and a separate Codex CLI option.
+
+Standard apps use exact WinGet package IDs and skip apps already installed.
+If WinGet is missing, press `B` to install or repair it using Microsoft's
+Microsoft.WinGet.Client module from PSGallery. Downloads require internet access.
+Continuing accepts the selected installers' and package sources' terms.
+The OpenAI desktop app requires a working Microsoft Store; Codex CLI is available
+separately without Store. Individual apps may require a newer Windows build.
+
+GitHub downloads come from the projects' stable releases. Windows assets are
+selected by architecture and checked against the size and SHA-256 digest published
+by GitHub. A missing or mismatched checksum prevents execution. TG WS Proxy and
+zapret get persistent files under `%ProgramData%\Cleanyourwindows\Apps` and Start
+menu shortcuts. zapret uses `%SystemDrive%\CleanyourwindowsApps` if an ASCII-only
+path is needed. Open its shortcut to select a strategy; no service is installed
+automatically. Vencord adds Discord Stable to the queue and runs the official
+CLI installer with `-install -branch stable`; close Discord first. Happ opens its
+Windows setup wizard, which you must complete. The app list and report distinguish
+portable files, verified WinGet installs, and installers requiring follow-up.
 
 ### Security component management
 
@@ -116,4 +189,4 @@ The launcher is compiled from `build/Launcher.cs`; it embeds the complete ZIP,
 requests administrator privileges and invokes the included PowerShell entry point.
 
 Checks (no actual removal): `Test-DebloatMenu.ps1`, `Test-DefenderTools.ps1`,
-`Test-ExperimentalRemoval.ps1`, `Test-Localization.ps1`.
+`Test-ExperimentalRemoval.ps1`, `Test-Localization.ps1`, `Test-AppInstaller.ps1`, `Test-Release.ps1`.

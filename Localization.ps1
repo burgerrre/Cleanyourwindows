@@ -16,25 +16,27 @@ function Select-UiLanguage {
 }
 
 if (-not $env:DEBLOAT_LANGUAGE) { Set-UiLanguage RU }
-$script:UiTranslations = @(Get-Content -LiteralPath (Join-Path $PSScriptRoot 'Languages.json') -Raw -Encoding UTF8 | ConvertFrom-Json)
-$script:UiEnglishTranslations = @($script:UiTranslations | Sort-Object { $_.RU.Length } -Descending)
-$script:UiRussianTranslations = @($script:UiTranslations | Where-Object { $_.EnglishFirst } | Sort-Object { $_.EN.Length } -Descending)
+$script:UiTranslations = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'Languages.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+$script:UiEnglishLookup=[Collections.Generic.Dictionary[string,string]]::new([StringComparer]::Ordinal)
+$script:UiRussianLookup=[Collections.Generic.Dictionary[string,string]]::new([StringComparer]::Ordinal)
+foreach ($pair in $script:UiTranslations) {
+    if ($pair.RU) { $script:UiEnglishLookup[[string]$pair.RU]=[string]$pair.EN }
+    if ($pair.EnglishFirst -and $pair.EN) { $script:UiRussianLookup[[string]$pair.EN]=[string]$pair.RU }
+}
+$script:UiEnglishPattern=(@($script:UiEnglishLookup.Keys | Sort-Object Length -Descending | ForEach-Object {[regex]::Escape($_)}) -join '|')
+$script:UiRussianPattern=(@($script:UiRussianLookup.Keys | Sort-Object Length -Descending | ForEach-Object {[regex]::Escape($_)}) -join '|')
 
 function Get-UiText {
     param([AllowEmptyString()][string]$Text)
-    $result = $Text
+    # Translate original text in one pass. Never translate generated fragments
+    # a second time, which can corrupt longer sentences and product names.
     if ($env:DEBLOAT_LANGUAGE -eq 'EN') {
-        foreach ($pair in $script:UiEnglishTranslations) {
-            $result = $result.Replace([string]$pair.RU,[string]$pair.EN)
-        }
+        $lookup=$script:UiEnglishLookup; $pattern=$script:UiEnglishPattern
     } else {
-        # Only English-first messages are translated back; translated Russian
-        # strings are never processed twice.
-        foreach ($pair in $script:UiRussianTranslations) {
-            $result = $result.Replace([string]$pair.EN,[string]$pair.RU)
-        }
+        $lookup=$script:UiRussianLookup; $pattern=$script:UiRussianPattern
     }
-    return $result
+    if (-not $Text -or -not $pattern) { return $Text }
+    return [regex]::Replace($Text,$pattern,[Text.RegularExpressions.MatchEvaluator]{param($match) $lookup[$match.Value]})
 }
 
 function Write-Ui {
