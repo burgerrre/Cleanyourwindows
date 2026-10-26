@@ -1,0 +1,572 @@
+﻿[
+  {
+    "RU": "Выбери приложения. Проверь список. Удали лишнее.",
+    "EN": "Choose apps. Review your selection. Remove what you do not need.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Личные файлы / Store / Defender / WebView2 сохраняются.",
+    "EN": "App removal preserves personal files / Store / Defender / WebView2.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "ВЫБОР  ПРИЛОЖЕНИЕ                         НАЛИЧИЕ",
+    "EN": "SELECT APPLICATION                         STATUS",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "не найдено",
+    "EN": "not found",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "найдено",
+    "EN": "found",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Выбрано групп:",
+    "EN": "Selected groups:",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Диск ",
+    "EN": "Drive ",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "свободно ",
+    "EN": "free ",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "ГБ",
+    "EN": "GiB",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Номера: переключить выбор (например 1 3 8)",
+    "EN": "Numbers: toggle selection (example: 1 3 8)",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "A = выбрать найденное   N = снять всё   P = план",
+    "EN": "A = select found apps   N = clear selection   P = preview",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "D = удалить выбранное  Q = выход",
+    "EN": "D = remove selected   Q = quit",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "W = активация Windows",
+    "EN": "W = Windows activation",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "(отдельно от списка)",
+    "EN": "(separate from app selection)",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Команда",
+    "EN": "Command",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Сначала выбери хотя бы одно найденное приложение.",
+    "EN": "Select at least one installed application first.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "ВЫБРАННЫЙ СПИСОК:",
+    "EN": "SELECTED APPLICATIONS:",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Enter: вернуться в меню",
+    "EN": "Enter: return to menu",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Удаление затронет все учётные записи и пакеты для новых пользователей.",
+    "EN": "Removal affects all accounts and packages provisioned for new users.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Закрой удаляемые программы. Может потребоваться перезагрузка.",
+    "EN": "Close the selected apps. A restart may be required.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Удалить выбранное? [y/N]",
+    "EN": "Remove selected apps? [y/N]",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Удаление отменено. Выбор сохранён.",
+    "EN": "Removal cancelled. Selection preserved.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Не найденные приложения пропущены.",
+    "EN": "Applications that were not found were skipped.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Введи номера через пробел, например: 1 3 8.",
+    "EN": "Enter numbers separated by spaces, for example: 1 3 8.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Номер '",
+    "EN": "Number '",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "' вне списка 1..",
+    "EN": "' is outside the range 1..",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "АКТИВАЦИЯ WINDOWS",
+    "EN": "WINDOWS ACTIVATION",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "1 = статус лицензии и срок активации",
+    "EN": "1 = license status and activation expiry",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "2 = ввести свой ключ / открыть параметры активации",
+    "EN": "2 = enter your key / open activation settings",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "3 = активировать с установленным ключом или цифровой лицензией",
+    "EN": "3 = activate using the installed key or digital license",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Q = назад в меню удаления",
+    "EN": "Q = return to app removal",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Нужна действующая лицензия этой редакции Windows.",
+    "EN": "A valid license for this Windows edition is required.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "В параметрах выбери изменение ключа продукта или устранение неполадок.",
+    "EN": "In Settings, choose Change product key or Troubleshoot.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Ключ вводится в окне Windows и не сохраняется скриптом.",
+    "EN": "Enter the key in Windows Settings. This script does not store it.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Запуск активации. Дождись ответа службы лицензирования...",
+    "EN": "Starting activation. Wait for the licensing service...",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Проверка фактического состояния лицензии:",
+    "EN": "Checking the actual license state:",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Выбери 1, 2, 3 или Q.",
+    "EN": "Choose 1, 2, 3 or Q.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Enter: вернуться к активации",
+    "EN": "Enter: return to activation",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Не найден штатный инструмент управления лицензией Windows.",
+    "EN": "The Windows licensing tool was not found.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Команда завершилась с кодом ",
+    "EN": "Command exited with code ",
+    "EnglishFirst": false
+  },
+  {
+    "RU": ". Проверь сообщение Windows.",
+    "EN": ". Check the Windows message.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Браузер; Windows может запретить удаление",
+    "EN": "Browser; Windows may block removal",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Включая Word, Excel, PowerPoint из подписки 365",
+    "EN": "Includes Word, Excel and PowerPoint from Microsoft 365",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Приложение Copilot и его Appx-провайдер",
+    "EN": "Copilot application and its Appx provider",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Видеоредактор",
+    "EN": "Video editor",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Новости и погода",
+    "EN": "News and Weather",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Xbox и Game Bar",
+    "EN": "Xbox and Game Bar",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Xbox-приложения, оверлей и запись экрана",
+    "EN": "Xbox apps, overlay and screen recording",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Приложения связи",
+    "EN": "Communication apps",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Связь с телефоном",
+    "EN": "Phone Link",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Microsoft Solitaire",
+    "EN": "Microsoft Solitaire",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Коллекция пасьянсов",
+    "EN": "Solitaire collection",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Музыка и Кино",
+    "EN": "Music and Movies",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Задачи, контакты и автоматизация",
+    "EN": "Tasks, contacts and automation",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Советы / справка / отзывы",
+    "EN": "Tips / Help / Feedback",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Карты Windows",
+    "EN": "Windows Maps",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Приложение Maps",
+    "EN": "Maps application",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Система:",
+    "EN": "System:",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Семейство:",
+    "EN": "Family:",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Сборка:",
+    "EN": "Build:",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Редакция:",
+    "EN": "Edition:",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "E = удаление Defender + Security UI, отключение UAC/SmartScreen",
+    "EN": "E = remove Defender + Security UI, disable UAC/SmartScreen",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "V = проверить текущее состояние   S = штатное удаление на Server   Enter = назад",
+    "EN": "V = inspect current state   S = standard Server uninstall   Enter = back",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Используются включённые исходники ionuttbara/windows-defender-remover.",
+    "EN": "Uses the included ionuttbara/windows-defender-remover sources.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Также меняются VBS, mitigation-политики и связанные защитные компоненты из исходника.",
+    "EN": "Also changes VBS, mitigation policies and related security components from upstream.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Операция необратима без резервной копии/переустановки. Сделай образ системы.",
+    "EN": "There is no reliable undo without a backup/reinstall. Create a system image first.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Перезагрузка выполняется вручную. Результат будет сохранён в отчёт.",
+    "EN": "Restart manually. The result will be saved to a report.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Запустить удаление? [y/N]",
+    "EN": "Start removal? [y/N]",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "На клиентской Windows нет штатной деинсталляции встроенного Defender Antivirus.",
+    "EN": "Client Windows has no standard uninstall for built-in Defender Antivirus.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Нужен Windows Server 2016+ с модулем ServerManager и компонентом Windows-Defender.",
+    "EN": "Requires Windows Server 2016+ with ServerManager and the Windows-Defender feature.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Доступна штатная деинсталляция серверного компонента.",
+    "EN": "Standard uninstall of the Server feature is available.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Удаление для этой системы недоступно. Изменений не будет.",
+    "EN": "This uninstall method is unavailable on this system. No changes made.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Будет удалён встроенный антивирус и файлы серверного компонента.",
+    "EN": "The built-in antivirus and Server feature payload will be removed.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Для восстановления может понадобиться источник установки Windows Server.",
+    "EN": "Restoring the feature may require Windows Server installation media.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Автоматической перезагрузки не будет. После удаления защита Defender недоступна.",
+    "EN": "No automatic restart. Defender protection will be unavailable after removal.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Удалить Defender? [y/N]",
+    "EN": "Remove Defender? [y/N]",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Результат:",
+    "EN": "Result:",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Нужна перезагрузка:",
+    "EN": "Restart required:",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Отчёт:",
+    "EN": "Report:",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Требуется перезагрузка. После неё повторно проверь компонент.",
+    "EN": "Restart required. Check the feature again afterwards.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "ServerManager сообщил об ошибке:",
+    "EN": "ServerManager reported an error:",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Сканирование установленных приложений...",
+    "EN": "Scanning installed applications...",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Выход. Ничего не удалено.",
+    "EN": "Exiting. Nothing was removed.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Удаление завершено. Повторное сканирование и возврат в меню через 4 секунды...",
+    "EN": "Removal finished. Rescanning and returning to the menu in 4 seconds...",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Запуск отменён или не удалось получить права администратора.",
+    "EN": "Launch cancelled or administrator rights could not be obtained.",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Enter: завершить",
+    "EN": "Enter: close",
+    "EnglishFirst": false
+  },
+  {
+    "RU": "Выбранные группы:",
+    "EN": "Selected groups:",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Удаление Microsoft 365 включает Word/Excel/PowerPoint. Сначала закрой эти приложения.",
+    "EN": "Office removal includes Word/Excel/PowerPoint in the Microsoft 365 suite. Close these apps first.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Store, Defender, Windows Update, WebView2, драйверы и личные файлы не входят в список удаления приложений.",
+    "EN": "Store, Defender, Windows Update, WebView2, drivers and personal files are outside the target list.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "ТОЛЬКО ПРОСМОТР. Для удаления добавь -Apply; для имитации добавь -WhatIf.",
+    "EN": "PREVIEW ONLY. Add -Apply to uninstall. You can also combine -Apply with -WhatIf.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Отчёт:",
+    "EN": "Report:",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Изменение свободного места:",
+    "EN": "Observed free-space change:",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "(другие процессы системы могут влиять на результат).",
+    "EN": "(other system activity can affect this).",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Осталось записей выбранных приложений:",
+    "EN": "Remaining target inventory entries:",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Проверь JSON-отчёт.",
+    "EN": "Check the JSON report.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Обновления Windows могут вернуть приложения. Профили и документы сохранены.",
+    "EN": "Windows updates can reinstall inbox applications. App profiles and user documents were preserved.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Если Edge остался, Windows может блокировать удаление. WebView2 — отдельный общий компонент.",
+    "EN": "If Edge remains, Windows may block its removal. WebView2 is a separate shared runtime.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Деинсталлятор запросил перезагрузку:",
+    "EN": "Reboot requested by uninstallers:",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Перезагрузи Windows вручную, затем выбери V в меню Defender для проверки остатков.",
+    "EN": "Restart Windows manually, then use V in the Defender menu to inspect remaining components.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Результат:",
+    "EN": "Result:",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "[ГОТОВО]",
+    "EN": "[DONE]",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "[ОШИБКА]",
+    "EN": "[FAILED]",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Удаление пакетов Windows Security",
+    "EN": "Remove Windows Security app packages",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Отключение UAC",
+    "EN": "Disable UAC",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Удаление заданий Defender",
+    "EN": "Remove Defender scheduled tasks",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Остановка ",
+    "EN": "Stop ",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Удаление ",
+    "EN": "Remove ",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "ТОЛЬКО ПРОСМОТР: удаление/отключение Defender, Windows Security, UAC, SmartScreen и связанных защит.",
+    "EN": "PREVIEW: removes/disables Defender, Windows Security, UAC, SmartScreen and upstream registry protections.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Изменений нет. Для запуска используй меню X.",
+    "EN": "No changes. Use the interactive X menu to review and explicitly confirm.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Недостаточно прав администратора.",
+    "EN": "Administrator rights required.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Сборка поддерживается начиная с Windows 10 1809 / Server 2019.",
+    "EN": "Security removal requires Windows 10 1809 / Server 2019 or newer.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Файл комплекта отсутствует или изменён:",
+    "EN": "Asset missing or modified:",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Отчёт не получен за 15 минут. Результат неизвестен; не считай удаление успешным.",
+    "EN": "No completion report after 15 minutes. Worker outcome is unknown; do not assume removal succeeded.",
+    "EnglishFirst": true
+  },
+  {
+    "RU": "Для удаления защитных компонентов нужна 64-разрядная Windows.",
+    "EN": "Security removal requires 64-bit Windows.",
+    "EnglishFirst": true
+  }
+]

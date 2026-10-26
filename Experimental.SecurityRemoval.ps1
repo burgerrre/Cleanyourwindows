@@ -1,8 +1,10 @@
 ﻿#requires -Version 5.1
 [CmdletBinding(SupportsShouldProcess=$true)]
-param([switch]$Apply, [switch]$Worker, [string]$ReportPath)
+param([switch]$Apply, [switch]$Worker, [string]$ReportPath, [ValidateSet('RU','EN')][string]$Language)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'Localization.ps1')
+if ($Language) { Set-UiLanguage $Language }
 $vendor = Join-Path $PSScriptRoot 'third_party\defender-remover'
 
 function Test-RemovalAssets {
@@ -19,20 +21,21 @@ function Test-RemovalAssets {
 Test-RemovalAssets -Root $PSScriptRoot
 . (Join-Path $PSScriptRoot 'Defender.Tools.ps1')
 $platform = Get-DefenderPlatform
-if ($platform.Build -lt 17763) { throw 'This experimental runner requires Windows 10 1809 / Server 2019 or newer.' }
+if ($platform.Build -lt 17763) { throw 'Security removal requires Windows 10 1809 / Server 2019 or newer.' }
+if (-not [Environment]::Is64BitOperatingSystem) { throw 'Security removal requires 64-bit Windows.' }
 if (-not $Apply) {
-    Write-Host 'PREVIEW: removes/disables Defender, Windows Security, UAC, SmartScreen and upstream registry protections.'
-    Write-Host 'LTSC 2019 (17763), LTSC 2021 (19044), Windows 10/11 and Server use detected paths/packages.'
-    Write-Host 'No changes. Use the interactive X menu to review and explicitly confirm.'
+    Write-Ui 'PREVIEW: removes/disables Defender, Windows Security, UAC, SmartScreen and upstream registry protections.'
+    Write-Ui 'LTSC 2019 (17763), LTSC 2021 (19044), Windows 10/11 and Server use detected paths/packages.'
+    Write-Ui 'No changes. Use the interactive X menu to review and explicitly confirm.'
     return
 }
-if (-not $PSCmdlet.ShouldProcess($platform.Caption, 'Experimental removal of Defender/Security UI and disabling UAC/SmartScreen')) { return }
+if (-not $PSCmdlet.ShouldProcess($platform.Caption, 'Remove Defender/Security UI and disable UAC/SmartScreen')) { return }
 if (-not $Worker) {
     $admin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     if (-not $admin) { throw 'Administrator rights required.' }
     $ReportPath = Join-Path $PSScriptRoot ('security-removal-' + [guid]::NewGuid().ToString('N') + '.json')
     $powerShell = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
-    $arguments = '"{0}" -NoProfile -ExecutionPolicy Bypass -File "{1}" -Apply -Worker -ReportPath "{2}"' -f $powerShell,$PSCommandPath,$ReportPath
+    $arguments = '"{0}" -NoProfile -ExecutionPolicy Bypass -File "{1}" -Apply -Worker -ReportPath "{2}" -Language {3}' -f $powerShell,$PSCommandPath,$ReportPath,$env:DEBLOAT_LANGUAGE
     Start-Process -FilePath (Join-Path $vendor 'PowerRun.exe') -ArgumentList $arguments -WorkingDirectory $vendor -Wait | Out-Null
     # PowerRun may return before the worker. Wait for its completion report, with a bound.
     $deadline = (Get-Date).AddMinutes(15)
@@ -41,8 +44,8 @@ if (-not $Worker) {
         Start-Sleep -Seconds 1
     }
     $report = Get-Content -LiteralPath $ReportPath -Raw | ConvertFrom-Json
-    Write-Host "Result: $($report.Status) | Report: $ReportPath" -ForegroundColor Cyan
-    Write-Host 'Restart Windows manually, then use V in the Defender menu to inspect remaining components.'
+    Write-Ui "Result: $($report.Status) | Report: $ReportPath" -ForegroundColor Cyan
+    Write-Ui 'Restart Windows manually, then use V in the Defender menu to inspect remaining components.'
     return
 }
 
@@ -51,8 +54,8 @@ $resolvedReport = [IO.Path]::GetFullPath($ReportPath)
 if ([IO.Path]::GetDirectoryName($resolvedReport) -ne $PSScriptRoot -or [IO.Path]::GetFileName($resolvedReport) -notmatch '^security-removal-[a-f0-9]{32}\.json$') { throw 'Invalid report target.' }
 $issues = New-Object 'System.Collections.Generic.List[string]'
 function Invoke-RemovalStep([string]$Name, [scriptblock]$Action) {
-    try { & $Action | Out-Null; Write-Host "[DONE] $Name" }
-    catch { $issues.Add("${Name}: $($_.Exception.Message)"); Write-Host "[FAILED] $Name" -ForegroundColor Yellow }
+    try { & $Action | Out-Null; Write-Ui "[DONE] $Name" }
+    catch { $issues.Add("${Name}: $($_.Exception.Message)"); Write-Ui "[FAILED] $Name" -ForegroundColor Yellow }
 }
 try {
     foreach ($name in @('SecHealthUI','SecurityHealthSystray','smartscreen','MsMpEng','NisSrv')) {

@@ -1,175 +1,123 @@
-﻿# Windows Debloat Deletor
+﻿# Cleanyourwindows — Windows Debloat Deletor
 
-## Тестовая ветка `test/defender`
+**[Download Cleanyourwindows.exe](https://github.com/burgerrre/Cleanyourwindows/releases/latest/download/Cleanyourwindows.exe)**
 
-`X` открывает экспериментальный раздел Defender. Определяются Windows 10,
-Windows 11, Windows Server и клиентские LTSC/LTSB (включая IoT LTSC).
-LTSC определяется отдельно от семейства ОС; сервер определяется по ProductType,
-а Windows 10/11 — по номеру сборки.
+## Русский
 
-### Экспериментальное удаление: X → E
+### Как запустить
 
-В репозиторий включены правила и PowerRun из
-[ionuttbara/windows-defender-remover](https://github.com/ionuttbara/windows-defender-remover),
-ревизия `6126092a5376753153295a20806ebd2f5f3e1c0e`. Загрузка/выполнение
-плавающей версии из интернета не требуется. Состав проверяется по SHA-256.
-Сторонние лицензии и происхождение файлов: `third_party/defender-remover/NOTICE.md`.
+1. Скачай **Cleanyourwindows.exe** в разделе [Releases](https://github.com/burgerrre/Cleanyourwindows/releases).
+2. Запусти EXE и разреши запуск от администратора.
+3. Выбери **2 — Русский** или **1 — English**.
+4. Выбери приложения, затем `D`. Подтверждение: `y` — да, `n` или Enter — отмена.
 
-Пункт **E** доступен на Windows 10 1809+, включая **LTSC 2019 (17763)**,
-**LTSC 2021 (19044)**, на Windows 11 и Server 2019+. Это допуск экспериментального
-алгоритма, а не заявление о проверенной совместимости каждой сборки.
-Перед запуском требуется подтверждение `y/n`: `y` запускает, `n` или Enter отменяет.
+**Обычному пользователю нужен только EXE.** Остальные PS1-файлы — исходники и
+вспомогательные модули. Для Portable ZIP распакуй весь архив и запусти **START.cmd**.
+Запускать каждый PS1 по очереди не нужно.
 
-Режим пытается удалить пакеты Windows Security, компоненты/службы и файлы Defender,
-задания Defender, применяет включённые правила отключения SmartScreen и отключает
-UAC через `EnableLUA=0`. Также применяются upstream-политики mitigation, VBS
-и других связанных защит, перечисленные в `.reg`-файлах. Режим изменяет систему
-существенно шире, чем обычное удаление приложений. Нужен заранее сохранённый
-образ системы; автоматического надёжного отката нет.
+EXE содержит комплект файлов, распаковывает его в
+`%LOCALAPPDATA%\Cleanyourwindows\Sessions\<сеанс>` и открывает меню.
+Отчёты остаются в папке сеанса. Интернет для распаковки не нужен.
+EXE и включённый сторонний PowerRun не имеют цифровой подписи.
 
-Защищённый исполнитель PowerRun 1.6 запускает worker с правами SYSTEM/TrustedInstaller.
-Бинарный файл включён из upstream, не подписан; его хеш не доказывает безопасность.
-Автоперезагрузки и фонового задания автозапуска нет. Рабочий процесс пишет
-`security-removal-*.json` с ошибками и фактическим состоянием. Ошибки доступа,
-блокировки Tamper Protection, оставшиеся пакеты и файлы не маскируются как успех.
-При ошибках результат `PartialOrFailed`; иначе `PendingRestartVerification`.
-Завершение процесса **не означает**, что все компоненты гарантированно удалены.
+### Управление
 
-После ручной перезагрузки снова выбери **X → V** для просмотра остаточных
-служб, пакетов, файлов и состояния UAC/SmartScreen. Заблокированные файлы могут
-остаться, а обслуживание Windows может восстановить компоненты. Для
-экспериментального режима нет гарантии полного удаления или совместимости
-с дальнейшими обновлениями Windows.
+| Команда | Действие |
+| --- | --- |
+| `1 3 8` | Поставить/снять отметки у групп приложений |
+| `A` / `N` | Выбрать всё найденное / снять выбор |
+| `P` / `D` | Просмотр выбранного / удаление |
+| `W` | Активация Windows действующей лицензией |
+| `X` | Defender, Windows Security, UAC и SmartScreen |
+| `Q` | Выход |
 
-Проверены синтаксис, состав/хеши, выбор и отмена режима; реальное удаление
-на LTSC 2019/2021 не запускалось. Тест: `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Test-ExperimentalRemoval.ps1`.
+После удаления приложений меню возвращается через 4 секунды, список сканируется
+заново, выбор сбрасывается. Личные документы, профили Edge, корзина, Downloads
+и кэши других программ не очищаются.
 
-### Штатное серверное удаление: X → S
+В список входят Edge, Microsoft 365 (включая Word/Excel/PowerPoint из подписки),
+Copilot, Xbox/Game Bar, Clipchamp, Teams, Phone Link и другие указанные приложения.
+Windows может запретить удаление Edge. Общий компонент WebView2 сохраняется.
+`W` использует штатные средства Windows; ключ вводится в параметрах Windows
+и не сохраняется скриптом.
 
-На Windows Server 2016+ при наличии ServerManager можно удалить установленные
-компоненты `Windows-Defender` / `Windows-Defender-Gui` через
-`Uninstall-WindowsFeature -Remove`. Состояние перепроверяется после операции;
-результат сохраняется в `defender-report-*.json`. Перезагрузка автоматически
-не запускается. При её необходимости результат — `PendingRestart`.
-Для восстановления удалённого компонента может понадобиться установочный
-источник соответствующей версии Windows Server.
+### Раздел X
 
-Штатный режим **S** недоступен на клиентских Windows 10/11, включая LTSC;
-для них отдельно предлагается экспериментальный режим **E**, описанный выше.
-Штатный режим требует подтверждения `y/n`: `y` запускает, `n` или Enter отменяет.
-Пункт `X` не включается в «выбрать всё». Основной список удаления не затрагивает Defender.
+- **E** — удаление Defender/Windows Security и отключение UAC/SmartScreen по включённым правилам стороннего проекта.
+- **S** — штатная деинсталляция Defender на Windows Server 2016+.
+- **V** — просмотр остаточных компонентов и настроек.
 
-Основание: [Microsoft — совместимость Defender и удаление на Server](https://learn.microsoft.com/en-us/defender-endpoint/microsoft-defender-antivirus-compatibility).
-Функция проверена на моках; настоящее удаление на Windows Server не проверялось.
-Тесты: `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Test-DefenderTools.ps1`.
+E допускает 64-разрядную Windows 10 1809+, включая LTSC 2019 (17763), LTSC 2021 (19044),
+Windows 11 и Server 2019+. Помимо Defender/UAC/SmartScreen применяются включённые
+правила изменения VBS, mitigation-политик и других защит. Раздел X не входит
+в «выбрать всё». Перед изменениями нужен образ системы: надёжного автоматического
+отката нет. Перезагрузка выполняется вручную.
 
-## Основной скрипт
+Результат записывается в JSON. `PartialOrFailed` означает ошибки;
+`PendingRestartVerification` требует перезагрузки и проверки через X → V.
+Заблокированные файлы могут остаться; обновления Windows могут вернуть компоненты.
+Завершение процесса не доказывает полного удаления.
 
-Скрипт для **Windows PowerShell 5.1 от имени администратора** в Windows 10/11.
-Удаление на компьютере автора при подготовке скрипта не запускалось.
+Проверены синтаксис, меню, RU/EN, отмена, целостность и упаковка.
+Реальное удаление на LTSC 2019/2021 и работа EXE на этих системах не проверялись.
 
-1. Закройте Edge, Word, Excel, PowerPoint и другие удаляемые приложения.
-2. Откройте Windows PowerShell от имени администратора.
-3. Перейдите в папку со скриптом и откройте меню:
+## English
 
-```powershell
-cd C:\path\to\Cleanyourwindows
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Remove-WindowsBloat.ps1
-```
+### Start here
 
-Или нажмите правой кнопкой на `Start-Debloat.ps1` → **Выполнить с помощью
-PowerShell**: запуск запросит права администратора.
+1. Download **Cleanyourwindows.exe** from [Releases](https://github.com/burgerrre/Cleanyourwindows/releases).
+2. Run it and accept the administrator prompt.
+3. Choose **1 — English** or **2 — Русский**.
+4. Select applications, press `D`, then answer `y` to proceed or `n`/Enter to cancel.
 
-В меню WINDOWS DEBLOAT DELETOR отображаются 13 групп приложений и их наличие
-на компьютере. Изначально ничего не выбрано. Введите номера через пробел
-(`1 3 8`), чтобы поставить или снять отметки. `A` выбирает всё найденное,
-`N` снимает выбор, `P` показывает выбранные приложения и пояснения,
-`D` открывает подтверждение удаления, `Q` закрывает меню. Для запуска удаления
-из меню нужно ответить `y` после просмотра итогового списка. `n` или Enter отменяет удаление; `Y` тоже принимается.
-После удаления скрипт через 4 секунды автоматически возвращается в меню,
-повторно сканирует приложения и сбрасывает выбор. Можно выбрать следующую
-группу или выйти командой `Q`. Для каждого удаления сохраняется отдельный отчёт.
-Возврат в меню работает при запуске через `Start-Debloat.ps1` и при обычном
-запуске основного скрипта; команды с `-Apply`, `-Preview` или `-WhatIf`
-выполняются один раз.
+**The EXE is the only file end users need.** PS1 files are source/support modules.
+For the Portable ZIP, extract the entire archive and run **START.cmd**.
+The EXE extracts its bundled files to
+`%LOCALAPPDATA%\Cleanyourwindows\Sessions\<session>`; reports remain there.
+Extraction does not require internet access. The EXE and bundled PowerRun are unsigned.
 
-`W` открывает раздел **Активация Windows**:
+Type numbers such as `1 3 8` to toggle groups. `A` selects installed groups,
+`N` clears selection, `P` previews, `D` removes, `W` opens Windows activation,
+`X` opens security component management, and `Q` exits. The app menu rescans
+and reopens four seconds after removal. Personal documents and browser profiles
+are preserved. Edge removal may be blocked by Windows; WebView2 is preserved.
+Activation requires a valid license; keys are entered in Windows Settings.
 
-- `1` — состояние лицензии и срок активации;
-- `2` — параметры Windows для ввода своего ключа и устранения неполадок;
-- `3` — активация установленной лицензии и повторная проверка состояния;
-- `Q` — возврат в меню удаления с сохранением выбора приложений.
+### Security component management
 
-Используются встроенные средства Windows: `slmgr.vbs /dli`, `/xpr`, `/ato`
-и страница `ms-settings:activation`. Нужна действующая лицензия установленной
-редакции Windows. Завершение команды само по себе не означает успешную активацию:
-проверь ответ Windows и состояние лицензии. Ключ вводится в параметрах Windows
-и не сохраняется скриптом. На корпоративном компьютере используется существующая
-конфигурация активации организации.
-Описание команд: [Microsoft Learn](https://learn.microsoft.com/en-us/windows-server/get-started/activation-slmgr-vbs-options).
-Найденными считаются также пакеты, предустановленные для будущих пользователей.
+X → E attempts Defender/Security UI removal and disables UAC/SmartScreen using
+bundled upstream registry rules. It admits 64-bit Windows 10 1809+, LTSC 2019/2021,
+Windows 11 and Server 2019+. It also changes VBS, mitigation policies and related
+security settings. X → S is the standard Server feature uninstall;
+X → V displays remaining components. These changes are separate from Select All.
 
-Для просмотра без интерактивного меню:
+Create a full system image first: there is no reliable automatic undo. Restart
+manually and check X → V. JSON reports preserve failures and remaining state.
+Locked files may remain and Windows servicing can restore components. Process
+completion is not proof of complete removal. Actual removal and EXE execution
+have not been validated on LTSC 2019/2021.
 
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Remove-WindowsBloat.ps1 -Preview
-```
+Windows tools and dialogs use the operating system's language. JSON status
+identifiers remain stable across UI languages.
 
-Следующие команды **пропускают меню** и сразу запускают удаление.
-Удалить Edge, Microsoft 365 и Copilot:
+## Source, licenses and build
+
+Third-party revision: `6126092a5376753153295a20806ebd2f5f3e1c0e` of
+[ionuttbara/windows-defender-remover](https://github.com/ionuttbara/windows-defender-remover).
+See [NOTICE](third_party/defender-remover/NOTICE.md) and its separate CC BY-NC 4.0
+license. The top-level license does not replace third-party licenses. PowerRun
+is Sordum freeware. SHA-256 pins included bytes; it does not authenticate the publisher.
+
+Build on Windows with .NET Framework 4.x and Windows PowerShell 5.1:
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Remove-WindowsBloat.ps1 -Apply
+.\Build-Release.ps1
 ```
 
-Удалить также дополнительные приложения:
+Or use `build-release.cmd`. Outputs: `dist/Cleanyourwindows.exe`,
+`dist/Cleanyourwindows-Portable.zip`, `dist/SHA256SUMS.txt`.
+The launcher is compiled from `build/Launcher.cs`; it embeds the complete ZIP,
+requests administrator privileges and invokes the included PowerShell entry point.
 
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Remove-WindowsBloat.ps1 -Apply -IncludeExtras
-```
-
-`-IncludeExtras` добавляет Clipchamp, новости, погоду, пасьянсы, People, Power Automate,
-To Do, Feedback Hub, карты, приложения Xbox, Groove/Movies, Phone Link, Skype и Teams.
-Удаление Xbox Game Bar отключит его оверлей и запись. Это конкретный список,
-а не автоматическое удаление всего, что скрипт посчитает ненужным.
-
-`-KeepEdge`, `-KeepOffice`, `-KeepCopilot` исключают соответствующий компонент.
-`-Apply -WhatIf` показывает действия без удаления и без записи отчёта.
-`-Preview -IncludeExtras` показывает полный список без меню.
-В меню доступны все группы; `-Keep*` исключает соответствующие группы из него.
-
-Синтаксис PowerShell 5.1 и сценарии выбора/отмены проверены автоматически.
-Повторить тесты меню без удаления: `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Test-DebloatMenu.ps1`.
-
-Appx-пакеты удаляются для всех пользователей, а provisioned-пакеты — из набора
-для новых учётных записей. Обычные программы удаляются зарегистрированными
-деинсталляторами Microsoft; могут появляться окна с вопросами. Microsoft 365
-удаляется вместе с входящими в комплект Word/Excel/PowerPoint. Бессрочные Office,
-отдельные Visio/Project и установленные у других пользователей Win32-программы
-за пределами доступных веток реестра не охватываются.
-
-Отчёт `debloat-report-*.json` содержит ошибки, остаточный список установленных
-пакетов и разницу свободного места на системном диске. В режиме предварительного
-просмотра наличие приложений в остаточном списке ожидаемо. Установщик может
-завершать удаление после перезагрузки: после неё запустите просмотр повторно.
-
-**«Полностью» здесь означает деинсталляцию приложения и удаление доступного
-предустановленного пакета, а не стирание каждого следа.** Профили Edge,
-документы Office и прочие пользовательские данные сохраняются. Скрипт не
-чистит Temp, корзину, Downloads, кэши других программ или WinSxS и не меняет
-Defender, Windows Update, службы и права доступа к системным папкам.
-
-В части сборок Windows Edge защищён от удаления. Скрипт пробует зарегистрированный
-деинсталлятор с `--force-uninstall`, проверяет остаточный список и сообщает
-о неудаче. Общий компонент WebView2 сохраняется. Встроенный legacy Copilot
-и системные AI-компоненты, не оформленные как перечисленные приложения,
-этим скриптом не удаляются. Обновления Windows могут вернуть приложения.
-
-Документация Microsoft:
-
-- [Ограничения удаления Edge](https://support.microsoft.com/en-us/edge/why-can-t-i-uninstall-microsoft-edge)
-- [Удаление Copilot](https://learn.microsoft.com/en-us/windows/client-management/manage-windows-copilot)
-- [Удаление Microsoft 365](https://support.microsoft.com/en-us/office/lifecycle/officeinstall/uninstall-microsoft-365-or-office-from-a-pc)
-
-Если обычное удаление Microsoft 365 не завершилось, используйте официальный
-инструмент [Get Help / OfficeScrubScenario](https://learn.microsoft.com/en-us/troubleshoot/microsoft-365/admin/miscellaneous/get-help-office-uninstall).
+Checks (no actual removal): `Test-DebloatMenu.ps1`, `Test-DefenderTools.ps1`,
+`Test-ExperimentalRemoval.ps1`, `Test-Localization.ps1`.

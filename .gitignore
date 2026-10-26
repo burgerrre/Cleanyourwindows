@@ -2,3 +2,4 @@ debloat-report-*.json
 defender-report-*.json
 security-removal-*.json
 security-removal-*.json.tmp
+dist/

@@ -1,5 +1,6 @@
 ﻿# Console UI and explicit package catalogue. No uninstall operations in this file.
 . (Join-Path $PSScriptRoot 'Defender.Tools.ps1')
+. (Join-Path $PSScriptRoot 'Localization.ps1')
 
 function Invoke-WindowsLicenseTool {
     param([ValidateSet('/dli','/xpr','/ato')][string]$Option)
@@ -8,7 +9,7 @@ function Invoke-WindowsLicenseTool {
     if (-not (Test-Path -LiteralPath $hostPath) -or -not (Test-Path -LiteralPath $scriptPath)) {
         throw 'Не найден штатный инструмент управления лицензией Windows.'
     }
-    & $hostPath '//Nologo' $scriptPath $Option | ForEach-Object { Write-Host "  $_" }
+    & $hostPath '//Nologo' $scriptPath $Option | ForEach-Object { Write-Ui "  $_" }
     if ($LASTEXITCODE -ne 0) { throw "Команда завершилась с кодом $LASTEXITCODE. Проверь сообщение Windows." }
 }
 
@@ -20,32 +21,32 @@ function Show-WindowsActivationMenu {
     while ($true) {
         Clear-Host
         Show-DebloatBanner
-        Write-Host '  АКТИВАЦИЯ WINDOWS' -ForegroundColor Cyan
-        Write-Host '  1 = статус лицензии и срок активации'
-        Write-Host '  2 = ввести свой ключ / открыть параметры активации'
-        Write-Host '  3 = активировать с установленным ключом или цифровой лицензией'
-        Write-Host '  Q = назад в меню удаления'
-        Write-Host "`n  Нужна действующая лицензия этой редакции Windows." -ForegroundColor DarkGray
-        $command = (Read-Host "`n  Команда").Trim().ToUpperInvariant()
+        Write-Ui '  АКТИВАЦИЯ WINDOWS' -ForegroundColor Cyan
+        Write-Ui '  1 = статус лицензии и срок активации'
+        Write-Ui '  2 = ввести свой ключ / открыть параметры активации'
+        Write-Ui '  3 = активировать с установленным ключом или цифровой лицензией'
+        Write-Ui '  Q = назад в меню удаления'
+        Write-Ui "`n  Нужна действующая лицензия этой редакции Windows." -ForegroundColor DarkGray
+        $command = (Read-Ui "`n  Команда").Trim().ToUpperInvariant()
         try {
             switch ($command) {
                 'Q' { return }
                 '1' { Invoke-WindowsLicenseTool '/dli'; Invoke-WindowsLicenseTool '/xpr' }
                 '2' {
                     Open-WindowsActivationSettings
-                    Write-Host '  В параметрах выбери изменение ключа продукта или устранение неполадок.' -ForegroundColor Cyan
-                    Write-Host '  Ключ вводится в окне Windows и не сохраняется скриптом.'
+                    Write-Ui '  В параметрах выбери изменение ключа продукта или устранение неполадок.' -ForegroundColor Cyan
+                    Write-Ui '  Ключ вводится в окне Windows и не сохраняется скриптом.'
                 }
                 '3' {
-                    Write-Host '  Запуск активации. Дождись ответа службы лицензирования...' -ForegroundColor Cyan
+                    Write-Ui '  Запуск активации. Дождись ответа службы лицензирования...' -ForegroundColor Cyan
                     Invoke-WindowsLicenseTool '/ato'
-                    Write-Host '  Проверка фактического состояния лицензии:' -ForegroundColor Cyan
+                    Write-Ui '  Проверка фактического состояния лицензии:' -ForegroundColor Cyan
                     Invoke-WindowsLicenseTool '/dli'
                 }
-                default { Write-Host '  Выбери 1, 2, 3 или Q.' -ForegroundColor Yellow }
+                default { Write-Ui '  Выбери 1, 2, 3 или Q.' -ForegroundColor Yellow }
             }
-        } catch { Write-Host "  $($_.Exception.Message)" -ForegroundColor Red }
-        Read-Host "`n  Enter: вернуться к активации" | Out-Null
+        } catch { Write-Ui "  $($_.Exception.Message)" -ForegroundColor Red }
+        Read-Ui "`n  Enter: вернуться к активации" | Out-Null
     }
 }
 
@@ -64,11 +65,15 @@ function Get-DebloatCatalog {
         @{ Id='productivity'; Title='To Do / People / Power Automate'; Note='Задачи, контакты и автоматизация'; Packages=@('Microsoft.Todos','Microsoft.People','Microsoft.PowerAutomateDesktop') },
         @{ Id='help'; Title='Советы / справка / отзывы'; Note='Get Started, Get Help, Feedback Hub'; Packages=@('Microsoft.Getstarted','Microsoft.GetHelp','Microsoft.WindowsFeedbackHub') },
         @{ Id='maps'; Title='Карты Windows'; Note='Приложение Maps'; Packages=@('Microsoft.WindowsMaps') }
-    ) | ForEach-Object { [pscustomobject]$_ }
+    ) | ForEach-Object {
+        $_.Title = Get-UiText $_.Title
+        $_.Note = Get-UiText $_.Note
+        [pscustomobject]$_
+    }
 }
 
 function Show-DebloatBanner {
-    Write-Host @'
+    Write-Ui @'
   __        _____ _   _ ____   _____        ______
   \ \      / /_ _| \ | |  _ \ / _ \ \      / / ___|
    \ \ /\ / / | ||  \| | | | | | | \ \ /\ / /\___ \
@@ -78,9 +83,9 @@ function Show-DebloatBanner {
            D E B L O A T   D E L E T O R
   ===========================================================
 '@ -ForegroundColor Cyan
-    Write-Host '  Выбери приложения. Проверь список. Удали лишнее.' -ForegroundColor White
-    Write-Host '  Личные файлы / Store / Defender / WebView2 сохраняются.' -ForegroundColor DarkGray
-    Write-Host ''
+    Write-Ui '  Выбери приложения. Проверь список. Удали лишнее.' -ForegroundColor White
+    Write-Ui '  Личные файлы / Store / Defender / WebView2 сохраняются.' -ForegroundColor DarkGray
+    Write-Ui ''
 }
 
 function ConvertTo-DebloatNumbers([string]$Text, [int]$Count) {
@@ -103,7 +108,7 @@ function Show-DebloatMenu([object[]]$Catalog, [string[]]$PresentIds) {
     while ($true) {
         Clear-Host
         Show-DebloatBanner
-        Write-Host '   #   ВЫБОР  ПРИЛОЖЕНИЕ                         НАЛИЧИЕ' -ForegroundColor DarkCyan
+        Write-Ui '   #   ВЫБОР  ПРИЛОЖЕНИЕ                         НАЛИЧИЕ' -ForegroundColor DarkCyan
         for ($i = 0; $i -lt $Catalog.Count; $i++) {
             $item = $Catalog[$i]
             $present = $item.Id -in $PresentIds
@@ -113,17 +118,17 @@ function Show-DebloatMenu([object[]]$Catalog, [string[]]$PresentIds) {
             $color = 'DarkGray'
             if ($present) { $state = 'найдено'; $color = 'White' }
             if ($mark -eq 'X') { $color = 'Green' }
-            Write-Host ('  {0,2}    [{1}]   {2,-34} {3}' -f ($i + 1), $mark, $item.Title, $state) -ForegroundColor $color
+            Write-Ui ('  {0,2}    [{1}]   {2,-34} {3}' -f ($i + 1), $mark, $item.Title, $state) -ForegroundColor $color
         }
-        Write-Host ''
-        Write-Host ('  Выбрано групп: {0}   |   Диск {1}: свободно {2:N1} ГБ' -f $selected.Count, $env:SystemDrive, ([IO.DriveInfo]::new($env:SystemDrive + '\').AvailableFreeSpace / 1GB)) -ForegroundColor Cyan
-        Write-Host '  Номера: переключить выбор (например 1 3 8)' -ForegroundColor White
-        Write-Host '  A = выбрать найденное   N = снять всё   P = план' -ForegroundColor White
-        Write-Host '  D = удалить выбранное  Q = выход' -ForegroundColor White
-        Write-Host '  W = активация Windows' -ForegroundColor Cyan
-        Write-Host '  X = Defender / тестовая функция (отдельно от списка)' -ForegroundColor Yellow
-        if ($message) { Write-Host "`n  $message" -ForegroundColor Yellow }
-        $command = (Read-Host "`n  Команда").Trim()
+        Write-Ui ''
+        Write-Ui ('  Выбрано групп: {0}   |   Диск {1}: свободно {2:N1} ГБ' -f $selected.Count, $env:SystemDrive, ([IO.DriveInfo]::new($env:SystemDrive + '\').AvailableFreeSpace / 1GB)) -ForegroundColor Cyan
+        Write-Ui '  Номера: переключить выбор (например 1 3 8)' -ForegroundColor White
+        Write-Ui '  A = выбрать найденное   N = снять всё   P = план' -ForegroundColor White
+        Write-Ui '  D = удалить выбранное  Q = выход' -ForegroundColor White
+        Write-Ui '  W = активация Windows' -ForegroundColor Cyan
+        Write-Ui '  X = Defender / UAC / SmartScreen (отдельно от списка)' -ForegroundColor Yellow
+        if ($message) { Write-Ui "`n  $message" -ForegroundColor Yellow }
+        $command = (Read-Ui "`n  Команда").Trim()
         $message = ''
         switch ($command.ToUpperInvariant()) {
             'Q' { return $null }
@@ -134,12 +139,12 @@ function Show-DebloatMenu([object[]]$Catalog, [string[]]$PresentIds) {
             { $_ -in @('D','P') } {
                 if ($selected.Count -eq 0) { $message = 'Сначала выбери хотя бы одно найденное приложение.'; continue }
                 $chosen = @($Catalog | Where-Object { $selected.ContainsKey($_.Id) })
-                Write-Host "`n  ВЫБРАННЫЙ СПИСОК:" -ForegroundColor Cyan
-                foreach ($item in $chosen) { Write-Host "  - $($item.Title): $($item.Note)" }
-                if ($command -ieq 'P') { Read-Host "`n  Enter: вернуться в меню" | Out-Null; continue }
-                Write-Host "`n  Удаление затронет все учётные записи и пакеты для новых пользователей." -ForegroundColor Yellow
-                Write-Host '  Закрой удаляемые программы. Может потребоваться перезагрузка.' -ForegroundColor Yellow
-                if ((Read-Host '  Удалить выбранное? [y/N]').Trim() -ieq 'y') {
+                Write-Ui "`n  ВЫБРАННЫЙ СПИСОК:" -ForegroundColor Cyan
+                foreach ($item in $chosen) { Write-Ui "  - $($item.Title): $($item.Note)" }
+                if ($command -ieq 'P') { Read-Ui "`n  Enter: вернуться в меню" | Out-Null; continue }
+                Write-Ui "`n  Удаление затронет все учётные записи и пакеты для новых пользователей." -ForegroundColor Yellow
+                Write-Ui '  Закрой удаляемые программы. Может потребоваться перезагрузка.' -ForegroundColor Yellow
+                if ((Read-Ui '  Удалить выбранное? [y/N]').Trim() -ieq 'y') {
                     return [pscustomobject]@{ Ids = @($chosen.Id) }
                 }
                 $message = 'Удаление отменено. Выбор сохранён.'

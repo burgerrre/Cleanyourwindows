@@ -10,6 +10,7 @@ Preview or uninstall Microsoft Edge, Microsoft 365, Copilot and selected inbox a
 [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
 param(
     [switch]$Apply,
+    [ValidateSet('RU','EN')][string]$Language,
     [switch]$Preview,
     [switch]$IncludeExtras,
     [switch]$KeepEdge,
@@ -26,6 +27,8 @@ $script:RebootRequired = $false
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
     [Security.Principal.WindowsBuiltInRole]::Administrator)
 if (-not $isAdmin) { throw 'Run Windows PowerShell as administrator (including preview, to inventory all users).' }
+if ($Language) { Set-UiLanguage $Language }
+elseif (-not $Apply -and -not $Preview -and -not $WhatIfPreference) { Select-UiLanguage }
 
 $catalog = @(Get-DebloatCatalog | Where-Object {
     -not (($KeepCopilot -and $_.Id -eq 'copilot') -or
@@ -37,7 +40,7 @@ function Add-Result([string]$Target, [string]$Action, [string]$Status, [string]$
     $script:Results.Add([pscustomobject]@{
         Target = $Target; Action = $Action; Status = $Status; Detail = $Detail
     })
-    Write-Host "[$Status] $Action : $Target $Detail"
+    Write-Ui "[$Status] $Action : $Target $Detail"
 }
 
 function Get-RegisteredTargets {
@@ -115,7 +118,7 @@ $script:RebootRequired = $false
 $selectedIds = @($catalog.Id)
 $before = [IO.DriveInfo]::new($env:SystemDrive + '\').AvailableFreeSpace
 Show-DebloatBanner
-Write-Host '  Сканирование установленных приложений...' -ForegroundColor Cyan
+Write-Ui '  Сканирование установленных приложений...' -ForegroundColor Cyan
 $allInstalled = @(Get-AppxPackage -AllUsers)
 $allProvisioned = @(Get-AppxProvisionedPackage -Online)
 $allRegistered = @(Get-RegisteredTargets)
@@ -131,7 +134,7 @@ if ($interactiveMode) {
         if ($found) { $item.Id }
     })
     $selection = Show-DebloatMenu -Catalog $catalog -PresentIds $presentIds
-    if ($null -eq $selection) { Write-Host '  Выход. Ничего не удалено.' -ForegroundColor Cyan; return }
+    if ($null -eq $selection) { Write-Ui '  Выход. Ничего не удалено.' -ForegroundColor Cyan; return }
     $selectedIds = @($selection.Ids)
     $Apply = [switch]$true
 } else {
@@ -142,10 +145,10 @@ $installed = @($allInstalled | Where-Object { $_.Name -in $names })
 $provisioned = @($allProvisioned | Where-Object { $_.DisplayName -in $names })
 $registered = @(Get-RegisteredTargets | Sort-Object -Property PSPath -Unique)
 
-Write-Host ('Selected groups: ' + ($selectedIds -join ', ')) -ForegroundColor Cyan
-Write-Host 'Office removal includes Word/Excel/PowerPoint in the Microsoft 365 suite. Close these apps first.'
-Write-Host 'Store, Defender, Windows Update, WebView2, drivers and personal files are outside the target list.'
-if (-not $Apply) { Write-Host 'PREVIEW ONLY. Add -Apply to uninstall. You can also combine -Apply with -WhatIf.' }
+Write-Ui ('Selected groups: ' + ($selectedIds -join ', ')) -ForegroundColor Cyan
+Write-Ui 'Office removal includes Word/Excel/PowerPoint in the Microsoft 365 suite. Close these apps first.'
+Write-Ui 'Store, Defender, Windows Update, WebView2, drivers and personal files are outside the target list.'
+if (-not $Apply) { Write-Ui 'PREVIEW ONLY. Add -Apply to uninstall. You can also combine -Apply with -WhatIf.' }
 
 foreach ($package in $installed) {
     $target = $package.PackageFullName
@@ -197,18 +200,18 @@ if (-not $WhatIfPreference) {
     }
     $reportPath = Join-Path $ReportDirectory ('debloat-report-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff') + '.json')
     $report | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $reportPath -Encoding UTF8
-    Write-Host "Report: $reportPath"
+    Write-Ui "Report: $reportPath"
 }
-Write-Host ('Observed free-space change: {0:N2} GiB (other system activity can affect this).' -f (($after - $before) / 1GB))
+Write-Ui ('Observed free-space change: {0:N2} GiB (other system activity can affect this).' -f (($after - $before) / 1GB))
 if ($Apply -and -not $WhatIfPreference) {
     $remainingCount = $remainingAppx.Count + $remainingProvisioned.Count + $remainingDesktop.Count
-    Write-Host "Remaining target inventory entries: $remainingCount. Check the JSON report."
-    Write-Host 'Windows updates can reinstall inbox applications. App profiles and user documents were preserved.'
-    Write-Host 'If Edge remains, Windows may block its removal. WebView2 is a separate shared runtime.'
-    Write-Host "Reboot requested by uninstallers: $script:RebootRequired"
+    Write-Ui "Remaining target inventory entries: $remainingCount. Check the JSON report."
+    Write-Ui 'Windows updates can reinstall inbox applications. App profiles and user documents were preserved.'
+    Write-Ui 'If Edge remains, Windows may block its removal. WebView2 is a separate shared runtime.'
+    Write-Ui "Reboot requested by uninstallers: $script:RebootRequired"
 }
 if ($interactiveMode) {
-    Write-Host "`n  Удаление завершено. Повторное сканирование и возврат в меню через 4 секунды..." -ForegroundColor Cyan
+    Write-Ui "`n  Удаление завершено. Повторное сканирование и возврат в меню через 4 секунды..." -ForegroundColor Cyan
     Start-Sleep -Seconds 4
 }
 } while ($interactiveMode)

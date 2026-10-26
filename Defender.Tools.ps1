@@ -1,4 +1,6 @@
 ﻿# Experimental feature removal for Windows Server.
+. (Join-Path $PSScriptRoot 'Localization.ps1')
+
 function Get-DefenderPlatform {
     $os = Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction Stop
     $version = Get-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -ErrorAction Stop
@@ -59,41 +61,41 @@ function Show-DefenderMenu {
         Clear-Host
         Show-DebloatBanner
         $platform = Get-DefenderPlatform
-        Write-Host '  DEFENDER / EXPERIMENTAL' -ForegroundColor Yellow
-        Write-Host "  Система: $($platform.Caption)"
-        Write-Host "  Семейство: $($platform.Family) | Сборка: $($platform.Build)"
-        Write-Host "  Редакция: $($platform.Edition) | LTSC/LTSB: $($platform.LTSC)"
-        Write-Host "`n  E = экспериментальное удаление Defender + Security UI, отключение UAC/SmartScreen" -ForegroundColor Yellow
-        Write-Host '  V = проверить текущее состояние   S = штатное удаление на Server   Enter = назад'
-        $choice = (Read-Host '  Команда').Trim().ToUpperInvariant()
+        Write-Ui '  DEFENDER / UAC / SMARTSCREEN' -ForegroundColor Yellow
+        Write-Ui "  Система: $($platform.Caption)"
+        Write-Ui "  Семейство: $($platform.Family) | Сборка: $($platform.Build)"
+        Write-Ui "  Редакция: $($platform.Edition) | LTSC/LTSB: $($platform.LTSC)"
+        Write-Ui "`n  E = удаление Defender + Security UI, отключение UAC/SmartScreen" -ForegroundColor Yellow
+        Write-Ui '  V = проверить текущее состояние   S = штатное удаление на Server   Enter = назад'
+        $choice = (Read-Ui '  Команда').Trim().ToUpperInvariant()
         if ($choice -eq 'V') { Get-ExperimentalSecurityState | Format-List | Out-Host; return }
         if ($choice -eq 'E') {
-            Write-Host '  Используются включённые исходники ionuttbara/windows-defender-remover.' -ForegroundColor Yellow
-            Write-Host '  Также меняются VBS, mitigation-политики и связанные защитные компоненты из исходника.'
-            Write-Host '  Операция необратима без резервной копии/переустановки. Сделай образ системы.'
-            Write-Host '  Автоперезагрузки нет. LTSC 2019/2021 допускаются, но на них не выполнен runtime-тест.'
-            if ((Read-Host '  Запустить экспериментальное удаление? [y/N]').Trim() -ieq 'y') {
+            Write-Ui '  Используются включённые исходники ionuttbara/windows-defender-remover.' -ForegroundColor Yellow
+            Write-Ui '  Также меняются VBS, mitigation-политики и связанные защитные компоненты из исходника.'
+            Write-Ui '  Операция необратима без резервной копии/переустановки. Сделай образ системы.'
+            Write-Ui '  Перезагрузка выполняется вручную. Результат будет сохранён в отчёт.'
+            if ((Read-Ui '  Запустить удаление? [y/N]').Trim() -ieq 'y') {
                 & (Join-Path $PSScriptRoot 'Experimental.SecurityRemoval.ps1') -Apply
             }
             return
         }
         if ($choice -ne 'S') { return }
-        Write-Host "`n  $($platform.Reason)" -ForegroundColor Cyan
+        Write-Ui "`n  $($platform.Reason)" -ForegroundColor Cyan
         if (-not $platform.Supported) {
-            Write-Host '  Удаление для этой системы недоступно. Изменений не будет.' -ForegroundColor Yellow
+            Write-Ui '  Удаление для этой системы недоступно. Изменений не будет.' -ForegroundColor Yellow
             return
         }
-        Write-Host '  Будет удалён встроенный антивирус и файлы серверного компонента.' -ForegroundColor Yellow
-        Write-Host '  Для восстановления может понадобиться источник установки Windows Server.'
-        Write-Host '  Автоматической перезагрузки не будет. После удаления защита Defender недоступна.'
-        if ((Read-Host "`n  Удалить Defender? [y/N]").Trim() -ine 'y') { return }
+        Write-Ui '  Будет удалён встроенный антивирус и файлы серверного компонента.' -ForegroundColor Yellow
+        Write-Ui '  Для восстановления может понадобиться источник установки Windows Server.'
+        Write-Ui '  Автоматической перезагрузки не будет. После удаления защита Defender недоступна.'
+        if ((Read-Ui "`n  Удалить Defender? [y/N]").Trim() -ine 'y') { return }
         $result = Invoke-DefenderFeatureRemoval
         if ($null -eq $result) { return }
         $reportPath = Join-Path $PSScriptRoot ('defender-report-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff') + '.json')
         $result | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $reportPath -Encoding UTF8
-        Write-Host "`n  Результат: $($result.Status) | Нужна перезагрузка: $($result.RestartRequired)" -ForegroundColor Cyan
-        Write-Host "  Отчёт: $reportPath"
-        if ($result.RestartRequired) { Write-Host '  Требуется перезагрузка. После неё повторно проверь компонент.' -ForegroundColor Yellow }
-    } catch { Write-Host "  $($_.Exception.Message)" -ForegroundColor Red }
-    finally { Read-Host "`n  Enter: вернуться в меню" | Out-Null }
+        Write-Ui "`n  Результат: $($result.Status) | Нужна перезагрузка: $($result.RestartRequired)" -ForegroundColor Cyan
+        Write-Ui "  Отчёт: $reportPath"
+        if ($result.RestartRequired) { Write-Ui '  Требуется перезагрузка. После неё повторно проверь компонент.' -ForegroundColor Yellow }
+    } catch { Write-Ui "  $($_.Exception.Message)" -ForegroundColor Red }
+    finally { Read-Ui "`n  Enter: вернуться в меню" | Out-Null }
 }
