@@ -1,4 +1,52 @@
 ﻿# Console UI and explicit package catalogue. No uninstall operations in this file.
+function Invoke-WindowsLicenseTool {
+    param([ValidateSet('/dli','/xpr','/ato')][string]$Option)
+    $hostPath = Join-Path $env:SystemRoot 'System32\cscript.exe'
+    $scriptPath = Join-Path $env:SystemRoot 'System32\slmgr.vbs'
+    if (-not (Test-Path -LiteralPath $hostPath) -or -not (Test-Path -LiteralPath $scriptPath)) {
+        throw 'Не найден штатный инструмент управления лицензией Windows.'
+    }
+    & $hostPath '//Nologo' $scriptPath $Option | ForEach-Object { Write-Host "  $_" }
+    if ($LASTEXITCODE -ne 0) { throw "Команда завершилась с кодом $LASTEXITCODE. Проверь сообщение Windows." }
+}
+
+function Open-WindowsActivationSettings {
+    Start-Process -FilePath 'ms-settings:activation' | Out-Null
+}
+
+function Show-WindowsActivationMenu {
+    while ($true) {
+        Clear-Host
+        Show-DebloatBanner
+        Write-Host '  АКТИВАЦИЯ WINDOWS' -ForegroundColor Cyan
+        Write-Host '  1 = статус лицензии и срок активации'
+        Write-Host '  2 = ввести свой ключ / открыть параметры активации'
+        Write-Host '  3 = активировать с установленным ключом или цифровой лицензией'
+        Write-Host '  Q = назад в меню удаления'
+        Write-Host "`n  Нужна действующая лицензия этой редакции Windows." -ForegroundColor DarkGray
+        $command = (Read-Host "`n  Команда").Trim().ToUpperInvariant()
+        try {
+            switch ($command) {
+                'Q' { return }
+                '1' { Invoke-WindowsLicenseTool '/dli'; Invoke-WindowsLicenseTool '/xpr' }
+                '2' {
+                    Open-WindowsActivationSettings
+                    Write-Host '  В параметрах выбери изменение ключа продукта или устранение неполадок.' -ForegroundColor Cyan
+                    Write-Host '  Ключ вводится в окне Windows и не сохраняется скриптом.'
+                }
+                '3' {
+                    Write-Host '  Запуск активации. Дождись ответа службы лицензирования...' -ForegroundColor Cyan
+                    Invoke-WindowsLicenseTool '/ato'
+                    Write-Host '  Проверка фактического состояния лицензии:' -ForegroundColor Cyan
+                    Invoke-WindowsLicenseTool '/dli'
+                }
+                default { Write-Host '  Выбери 1, 2, 3 или Q.' -ForegroundColor Yellow }
+            }
+        } catch { Write-Host "  $($_.Exception.Message)" -ForegroundColor Red }
+        Read-Host "`n  Enter: вернуться к активации" | Out-Null
+    }
+}
+
 function Get-DebloatCatalog {
     @(
         @{ Id='edge'; Title='Microsoft Edge'; Note='Браузер; Windows может запретить удаление'; Packages=@('Microsoft.MicrosoftEdge.Stable') },
@@ -70,11 +118,13 @@ function Show-DebloatMenu([object[]]$Catalog, [string[]]$PresentIds) {
         Write-Host '  Номера: переключить выбор (например 1 3 8)' -ForegroundColor White
         Write-Host '  A = выбрать найденное   N = снять всё   P = план' -ForegroundColor White
         Write-Host '  D = удалить выбранное  Q = выход' -ForegroundColor White
+        Write-Host '  W = активация Windows' -ForegroundColor Cyan
         if ($message) { Write-Host "`n  $message" -ForegroundColor Yellow }
         $command = (Read-Host "`n  Команда").Trim()
         $message = ''
         switch ($command.ToUpperInvariant()) {
             'Q' { return $null }
+            'W' { Show-WindowsActivationMenu; continue }
             'A' { foreach ($item in $Catalog) { if ($item.Id -in $PresentIds) { $selected[$item.Id] = $true } }; continue }
             'N' { $selected.Clear(); continue }
             { $_ -in @('D','P') } {

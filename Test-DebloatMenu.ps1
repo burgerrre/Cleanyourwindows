@@ -40,3 +40,19 @@ if ($null -ne $answer) { throw 'Quit returned a removal selection.' }
 $answer = Invoke-MenuScenario @('A','D','delete','Q') @('edge')
 if ($null -ne $answer) { throw 'Confirmation was not exact.' }
 Write-Host 'PASS: catalog, input validation and 6 interactive scenarios. No uninstall operations executed.' -ForegroundColor Green
+
+# Mock activation entry points: tests never change the license.
+& {
+    $queue = New-Object 'System.Collections.Generic.Queue[string]'
+    foreach ($line in @('1','','2','','3','','Q')) { $queue.Enqueue($line) }
+    $calls = New-Object 'System.Collections.Generic.List[string]'
+    function Read-Host { param([string]$Prompt) if (-not $queue.Count) { throw 'Unexpected activation input.' }; $queue.Dequeue() }
+    function Clear-Host { }
+    function Write-Host { param($Object, $ForegroundColor) }
+    function Invoke-WindowsLicenseTool { param($Option) $calls.Add($Option) }
+    function Open-WindowsActivationSettings { $calls.Add('settings') }
+    Show-WindowsActivationMenu
+    if (($calls -join ',') -ne '/dli,/xpr,settings,/ato,/dli') { throw 'Activation menu dispatch failed.' }
+    if ($queue.Count) { throw 'Activation menu did not return on Q.' }
+}
+Write-Host 'PASS: activation menu dispatch and return (mocked; no license changes).' -ForegroundColor Green
