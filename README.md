@@ -1,6 +1,8 @@
 ﻿# Cleanyourwindows — Windows Debloat Deletor
 
-**[Download Cleanyourwindows.exe](https://github.com/burgerrre/Cleanyourwindows/releases/latest/download/Cleanyourwindows.exe)**
+**Web UI preview — ветка `test/web-ui`. Стабильная версия `main` не изменена.**
+
+**[Download Web UI preview EXE](https://github.com/burgerrre/Cleanyourwindows/releases/download/v1.2.0-webui.1/Cleanyourwindows.exe)**
 
 ## Русский
 
@@ -8,8 +10,9 @@
 
 1. Скачай **Cleanyourwindows.exe** в разделе [Releases](https://github.com/burgerrre/Cleanyourwindows/releases).
 2. Запусти EXE и разреши запуск от администратора.
-3. Выбери **2 — Русский** или **1 — English**.
-4. Выбери приложения, затем `D`. Подтверждение: `y` — да, `n` или Enter — отмена.
+3. Откроется локальный интерфейс в браузере. Выбери **Русский** или **English**.
+4. Открой «Удаление» или «Установка», отметь карточки и нажми «Проверить выбор».
+5. Просмотри список и подтверди действие кнопкой. Ход выполнения появится в журнале.
 
 **Обычному пользователю нужен только EXE.** Остальные PS1-файлы — исходники и
 вспомогательные модули. Для Portable ZIP распакуй весь архив и запусти **START.cmd**.
@@ -20,7 +23,28 @@ EXE содержит комплект файлов, распаковывает �
 Отчёты остаются в папке сеанса. Интернет для распаковки не нужен.
 EXE и включённый сторонний PowerRun не имеют цифровой подписи.
 
-### Управление
+### Web UI
+
+В боковом меню: обзор компьютера, удаление, установка, системные компоненты и журнал.
+Есть поиск, фильтры, выбор карточками, просмотр зависимостей и переключение RU/EN.
+Интерфейс работает через 127.0.0.1 в установленном современном браузере (Firefox,
+Chrome, Brave или Edge); WebView2 не требуется. UI и шрифты не загружаются из интернета.
+
+Для действий нужны права администратора. Служба слушает только loopback; API требует
+случайный ключ сеанса, правильный Host/Origin и явное подтверждение. Одновременно
+выполняется только одна операция. Закрытие программы доступно в боковом меню; после
+пяти минут без активной вкладки и незавершённых задач сервер останавливается.
+Отчёты GUI сохраняются в папке сеанса `.webui-runtime`.
+
+Посмотреть дизайн без изменений системы: `Cleanyourwindows.exe --demo` или
+`powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Start-WebUi.ps1 -Demo`.
+Демонстрационный режим использует пример каталога и имитирует операции.
+
+### Консольный режим
+
+Старый интерфейс доступен через **START-CONSOLE.cmd** или `Cleanyourwindows.exe --console`.
+
+### Управление в консоли
 
 | Команда | Действие |
 | --- | --- |
@@ -109,8 +133,9 @@ Windows 11 и Server 2019+. Помимо Defender/UAC/SmartScreen применя
 
 1. Download **Cleanyourwindows.exe** from [Releases](https://github.com/burgerrre/Cleanyourwindows/releases).
 2. Run it and accept the administrator prompt.
-3. Choose **1 — English** or **2 — Русский**.
-4. Select applications, press `D`, then answer `y` to proceed or `n`/Enter to cancel.
+3. The local browser interface opens. Choose **English** or **Русский**.
+4. Open Uninstall apps or Install apps, select cards, and review your selection.
+5. Confirm in the dialog and follow progress in Activity.
 
 **The EXE is the only file end users need.** PS1 files are source/support modules.
 For the Portable ZIP, extract the entire archive and run **START.cmd**.
@@ -118,7 +143,24 @@ The EXE extracts its bundled files to
 `%LOCALAPPDATA%\Cleanyourwindows\Sessions\<session>`; reports remain there.
 Extraction does not require internet access. The EXE and bundled PowerRun are unsigned.
 
-Type numbers such as `1 3 8` to toggle groups. `A` selects installed groups,
+### Web UI preview
+
+This branch adds Overview, Uninstall apps, Install apps, Security, and Activity.
+The UI includes search, filters, card selection, dependency review, confirmation
+dialogs, live output, and RU/EN. It uses the default modern browser (Firefox,
+Chrome, Brave, or Edge), not WebView2. UI assets and fonts are bundled offline.
+
+The server binds only to IPv4 loopback. API calls require a random session token;
+Host/Origin checks, JSON-only POSTs, explicit confirmation, one-operation locking,
+and a restrictive content security policy are enforced. Operations run in separate
+PowerShell workers. The server exits after five idle minutes when no job is running.
+GUI reports are stored under the session's `.webui-runtime` directory.
+
+Use `Cleanyourwindows.exe --demo` to explore a simulated catalog without system
+changes. `Start-WebUi.ps1 -Demo` also runs without administrator rights. The old
+console menu is available with **START-CONSOLE.cmd** or the EXE's `--console` option.
+
+In console mode, type numbers such as `1 3 8` to toggle groups. `A` selects installed groups,
 `N` clears selection, `P` previews, `D` removes,
 `I` opens the app installer, `X` manages security components, and `Q` exits. The app menu rescans
 and reopens four seconds after removal. Personal documents and browser profiles
@@ -192,3 +234,18 @@ requests administrator privileges and invokes the included PowerShell entry poin
 
 Checks (no actual removal): `Test-DebloatMenu.ps1`, `Test-DefenderTools.ps1`,
 `Test-ExperimentalRemoval.ps1`, `Test-Localization.ps1`, `Test-AppInstaller.ps1`, `Test-WingetBootstrap.ps1`, `Test-Release.ps1`.
+## Web UI development checks
+
+`Test-WebUi.ps1` starts a real demo server and checks authentication, Origin/Host,
+confirmation, dependency plans, job locking and shutdown. It never runs system actions.
+
+Browser checks use Playwright (dev dependency only; end users do not need Node.js).
+Start `Start-WebUi.ps1 -Demo -NoBrowser`, then install dev dependencies with `npm install`
+and run `npm run test:browser -- .webui-runtime/session.json`. Install a Playwright
+Chromium browser with `npx playwright install chromium` or set `WEBUI_BROWSER` to an
+existing Chromium-based browser executable. Screenshots go next to the session JSON.
+
+The preview was checked in Windows PowerShell 5.1 and a real headless Chromium-based
+browser. Real uninstall/install/security operations through the new UI have not been
+executed on the development computer. The existing function and installer tests remain
+available. The main branch and stable release are not changed by this preview.

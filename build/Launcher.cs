@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Security.Cryptography;
 
 [assembly: AssemblyTitle("Cleanyourwindows")]
-[assembly: AssemblyVersion("1.1.1.0")]
-[assembly: AssemblyFileVersion("1.1.1.0")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
 
 internal static class Launcher
 {
@@ -15,7 +15,7 @@ internal static class Launcher
     {
         try
         {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            try { Console.OutputEncoding = System.Text.Encoding.UTF8; } catch (IOException) { }
             byte[] payload;
             using (Stream input = Assembly.GetExecutingAssembly().GetManifestResourceStream("payload.zip"))
             using (var buffer = new MemoryStream())
@@ -57,9 +57,13 @@ internal static class Launcher
             string powerShell = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows),
                 "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
             string start = Path.Combine(root, "Start-Debloat.ps1");
+            bool consoleMode = Array.IndexOf(args, "--console") >= 0;
+            bool demoMode = Array.IndexOf(args, "--demo") >= 0;
             var options = new ProcessStartInfo(powerShell,
-                "-NoProfile -ExecutionPolicy Bypass -File \"" + start + "\"");
+                "-NoProfile -ExecutionPolicy Bypass -File \"" + start + "\"" +
+                (consoleMode ? " -Console" : "") + (demoMode ? " -Demo" : ""));
             options.UseShellExecute = false;
+            options.CreateNoWindow = !consoleMode;
             options.WorkingDirectory = root;
             using (Process process = Process.Start(options))
             {
@@ -69,9 +73,9 @@ internal static class Launcher
         }
         catch (Exception error)
         {
-            Console.Error.WriteLine("Launch failed / Ошибка запуска: " + error.Message);
-            Console.WriteLine("Press Enter / Нажмите Enter");
-            Console.ReadLine();
+            System.Windows.Forms.MessageBox.Show("Launch failed / Ошибка запуска: " + error.Message,
+                "Cleanyourwindows", System.Windows.Forms.MessageBoxButtons.OK,
+                System.Windows.Forms.MessageBoxIcon.Error);
             return 1;
         }
     }

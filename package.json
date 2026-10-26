@@ -1,0 +1,7 @@
+{
+  "name": "cleanyourwindows-web-ui",
+  "version": "1.2.0-webui.1",
+  "private": true,
+  "scripts": {"test:browser": "node tests/web-ui.cjs"},
+  "devDependencies": {"playwright": "1.62.1"}
+}

@@ -5,3 +5,5 @@ security-removal-*.json.tmp
 dist/
 install-report-*.json
 .test-artifacts/
+.webui-runtime/
+node_modules/

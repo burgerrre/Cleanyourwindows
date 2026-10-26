@@ -1,0 +1,63 @@
+// Browser checks run only against the non-destructive -Demo server.
+const fs = require('node:fs');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+const { chromium } = require('playwright');
+
+(async () => {
+  const session = JSON.parse(fs.readFileSync(process.argv[2], 'utf8').replace(/^\uFEFF/, ''));
+  assert.equal(session.demo, true, 'Browser checks require a demo server');
+  const output = path.dirname(process.argv[2]);
+  const browser = await chromium.launch({ headless: true, ...(process.env.WEBUI_BROWSER ? { executablePath: process.env.WEBUI_BROWSER } : {}) });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    page.on('console', message => {if (message.type() === 'error') errors.push(message.text());});
+    await page.goto(session.origin + '/#token=' + session.token);
+    await page.locator('[data-initial-language="EN"]').click();
+    await page.locator('.hero').waitFor();
+    const initial = await page.request.get(session.origin + '/api/state', { headers: { 'X-Cleanyourwindows-Token': session.token } });
+    const initialJobs = (await initial.json()).jobs.length;
+    await page.screenshot({ path: path.join(output, 'overview-en.png'), fullPage: true });
+    await page.locator('[data-language="RU"]').click();
+    await page.screenshot({ path: path.join(output, 'overview-ru-start.png'), fullPage: true });
+    await page.locator('[data-language="EN"]').click();
+    await page.locator('#navigation [data-page="install"]').click();
+    assert.equal(await page.locator('.app-card').count(), 16);
+    await page.locator('[data-app="firefox"]').click();
+    await page.locator('[data-app="vencord"]').click();
+    await page.locator('#reviewButton').click();
+    await page.locator('#confirmDialog[open]').waitFor();
+    assert.equal(await page.locator('.dialog-list li').count(), 3);
+    assert.match(await page.locator('.dialog-list').innerText(), /Discord/);
+    assert.equal(await page.locator('.dependency').count(), 1);
+    await page.screenshot({ path: path.join(output, 'install-confirm-en.png'), fullPage: true });
+    await page.locator('#cancelConfirm').click();
+    const before = await page.request.get(session.origin + '/api/state', { headers: { 'X-Cleanyourwindows-Token': session.token } });
+    assert.equal((await before.json()).jobs.length, initialJobs, 'Cancellation must not launch a job');
+    await page.locator('#reviewButton').click();
+    await page.locator('#acceptConfirm').click();
+    await page.locator('.job-card').first().locator('.status-tag.completed').waitFor({ timeout: 15000 });
+    assert.match(await page.locator('.job-log').first().innerText(), /No system changes/);
+    await page.screenshot({ path: path.join(output, 'activity-en.png'), fullPage: true });
+    await page.locator('#navigation [data-page="uninstall"]').click();
+    await page.locator('[data-app="office"]').click();
+    await page.locator('#appSearch').fill('copilot');
+    assert.equal(await page.locator('.app-card').count(), 1);
+    await page.locator('[data-app="copilot"]').click();
+    await page.locator('#appSearch').fill('');
+    assert.equal(await page.locator('.app-card.selected').count(), 2);
+    await page.screenshot({ path: path.join(output, 'uninstall-en.png'), fullPage: true });
+    await page.locator('[data-language="RU"]').click();
+    await page.locator('#navigation [data-page="overview"]').click();
+    assert.match(await page.locator('.page-intro h1').innerText(), /контролем/);
+    await page.screenshot({ path: path.join(output, 'overview-ru.png'), fullPage: true });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.screenshot({ path: path.join(output, 'mobile-ru.png'), fullPage: true });
+    const overflow = await page.evaluate(() => [...document.querySelectorAll('body *')].filter(node => node.getBoundingClientRect().right > innerWidth + 1).map(node=>({tag:node.tagName,classes:node.className,right:Math.round(node.getBoundingClientRect().right)})).slice(0,12));
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'Mobile layout must not overflow: '+JSON.stringify(overflow));
+    assert.deepEqual(errors, [], 'No browser runtime errors are expected');
+    console.log('PASS: browser rendering, RU/EN, 16 apps, search, selection, dependency review, cancellation, demo job and responsive layout.');
+  } finally { await browser.close(); }
+})().catch(error => { console.error(error); process.exitCode = 1; });

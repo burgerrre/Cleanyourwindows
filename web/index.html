@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Cleanyourwindows</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2315191c'/%3E%3Cpath d='M6 6h9v9H6zm11 0h9v9h-9zM6 17h9v9H6zm11 0h9v9h-9z' fill='%23c5eb87'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview"><span class="brand-mark"><i></i><i></i><i></i><i></i></span><span>clean<span class="brand-soft">yourwindows</span><small>YOUR PC. YOUR CHOICE.</small></span></a>
+      <div class="nav-caption" data-i18n="workspace">РАБОЧАЯ ОБЛАСТЬ</div>
+      <nav id="navigation" aria-label="Navigation"></nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note"><span class="tiny-spark">✦</span><strong data-i18n="oneStep">Начни с малого</strong><p data-i18n="oneStepNote">Выбирай только то, что тебе действительно не нужно.</p></div>
+        <button id="quitButton" class="quiet-button"></button>
+        <div class="version"><span class="live-dot"></span>Web UI <span class="version-number">0.1 preview</span></div>
+      </div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <div class="breadcrumb"><span data-i18n="workspaceName">Мой компьютер</span><span class="slash">/</span><strong id="breadcrumbPage"></strong></div>
+        <div class="topbar-actions"><span id="connection" class="connection"><i></i><span data-i18n="connecting">Подключение</span></span><button id="refreshButton" class="icon-button" aria-label="Refresh"></button><div class="language-switch" aria-label="Language"><button data-language="RU">RU</button><button data-language="EN">EN</button></div></div>
+      </header>
+      <main id="main" tabindex="-1"><div class="loading"><span class="spinner"></span><p data-i18n="loading">Готовим рабочее пространство…</p></div></main>
+      <footer id="selectionDock" class="selection-dock" hidden></footer>
+    </div>
+  </div>
+  <div id="toast" role="status" class="toast" hidden></div>
+  <dialog id="confirmDialog" class="confirm-dialog" aria-labelledby="dialogTitle"><div id="dialogContent"></div></dialog>
+  <dialog id="languageDialog" class="language-dialog"><span class="eyebrow">CLEANYOURWINDOWS</span><h1>Your PC.<br>Your language.</h1><p>Выбери язык интерфейса / Choose your language</p><div class="language-options"><button data-initial-language="RU"><span>RU</span>Русский<b>→</b></button><button data-initial-language="EN"><span>EN</span>English<b>→</b></button></div></dialog>
+</body>
+</html>

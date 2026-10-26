@@ -10,6 +10,7 @@ Preview or uninstall Microsoft Edge, Microsoft 365, Copilot and selected inbox a
 [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
 param(
     [switch]$Apply,
+    [string[]]$SelectedGroups,
     [ValidateSet('RU','EN')][string]$Language,
     [switch]$Preview,
     [switch]$IncludeExtras,
@@ -110,7 +111,11 @@ function Invoke-RegisteredUninstall($Entry) {
     Add-Result $Entry.DisplayName 'Uninstaller' 'StartedAndExited' "Exit code $($process.ExitCode); inventory verification follows."
 }
 
-$interactiveMode = -not $Apply -and -not $Preview -and -not $WhatIfPreference
+$hasSelectedGroups=$PSBoundParameters.ContainsKey('SelectedGroups')
+if ($hasSelectedGroups) {
+    if (-not $SelectedGroups.Count -or @($SelectedGroups | Where-Object { $_ -notin $catalog.Id }).Count) { throw 'Invalid or empty application group selection.' }
+}
+$interactiveMode = -not $Apply -and -not $Preview -and -not $WhatIfPreference -and -not $hasSelectedGroups
 do {
 # Each interactive pass gets a fresh inventory, selection and report.
 $script:Results.Clear()
@@ -138,7 +143,8 @@ if ($interactiveMode) {
     $selectedIds = @($selection.Ids)
     $Apply = [switch]$true
 } else {
-    $selectedIds = @($catalog | Where-Object { $IncludeExtras -or $_.Id -in @('edge','office','copilot') } | Select-Object -ExpandProperty Id)
+    if ($hasSelectedGroups) { $selectedIds=@($SelectedGroups | Select-Object -Unique) }
+    else { $selectedIds = @($catalog | Where-Object { $IncludeExtras -or $_.Id -in @('edge','office','copilot') } | Select-Object -ExpandProperty Id) }
 }
 $names = @($catalog | Where-Object { $_.Id -in $selectedIds } | ForEach-Object { $_.Packages })
 $installed = @($allInstalled | Where-Object { $_.Name -in $names })
