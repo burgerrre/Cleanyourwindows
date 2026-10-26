@@ -3,6 +3,9 @@
 $ErrorActionPreference='Stop'
 Set-StrictMode -Version Latest
 . (Join-Path $PSScriptRoot 'Debloat.Menu.ps1')
+# The generic installer tests must never bootstrap software on the test host.
+function Get-AppWingetPath { 'mock-winget.exe' }
+function Install-AppWinget { throw 'Unexpected real WinGet bootstrap in installer tests.' }
 $fixtureParent=Join-Path $PSScriptRoot '.test-artifacts'
 $fixtureRoot=Join-Path $fixtureParent ([guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $fixtureRoot -Force | Out-Null

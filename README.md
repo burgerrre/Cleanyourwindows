@@ -52,8 +52,9 @@ Windows может запретить удаление Edge. Общий комп
 Google Antigravity, Claude Code, Telegram Desktop и отдельный Codex CLI.
 
 Обычные приложения ставятся через WinGet с точными идентификаторами пакетов.
-Уже установленные программы пропускаются. Если WinGet отсутствует, `B` устанавливает
-или восстанавливает его официальным модулем Microsoft.WinGet.Client из PSGallery.
+Уже установленные программы пропускаются. Если WinGet отсутствует, он автоматически устанавливается перед выбранными программами
+официальным модулем Microsoft.WinGet.Client из PSGallery. Дополнительно нажимать `B`
+не нужно: эта команда остаётся для ручного восстановления.
 Потребуется интернет. Подтверждение установки означает принятие условий выбранных
 приложений и источников пакетов. Некоторые приложения требуют новую сборку Windows.
 Codex / ChatGPT desktop использует Microsoft Store и недоступен на системах без
@@ -135,8 +136,9 @@ Vencord, Happ for Windows, 7-Zip, Steam, Prism Launcher, Codex / ChatGPT desktop
 Google Antigravity, Claude Code, Telegram Desktop, and a separate Codex CLI option.
 
 Standard apps use exact WinGet package IDs and skip apps already installed.
-If WinGet is missing, press `B` to install or repair it using Microsoft's
-Microsoft.WinGet.Client module from PSGallery. Downloads require internet access.
+If WinGet is missing, it is installed automatically before the selected apps using
+Microsoft's Microsoft.WinGet.Client module from PSGallery. No extra `B` action is
+needed; it remains available for manual repair. Downloads require internet access.
 Continuing accepts the selected installers' and package sources' terms.
 The OpenAI desktop app requires a working Microsoft Store; Codex CLI is available
 separately without Store. Individual apps may require a newer Windows build.
@@ -189,4 +191,4 @@ The launcher is compiled from `build/Launcher.cs`; it embeds the complete ZIP,
 requests administrator privileges and invokes the included PowerShell entry point.
 
 Checks (no actual removal): `Test-DebloatMenu.ps1`, `Test-DefenderTools.ps1`,
-`Test-ExperimentalRemoval.ps1`, `Test-Localization.ps1`, `Test-AppInstaller.ps1`, `Test-Release.ps1`.
+`Test-ExperimentalRemoval.ps1`, `Test-Localization.ps1`, `Test-AppInstaller.ps1`, `Test-WingetBootstrap.ps1`, `Test-Release.ps1`.

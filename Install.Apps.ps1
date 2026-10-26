@@ -38,6 +38,14 @@ function Get-AppWingetPath {
     if ($command) { return $command.Source }
     $alias=Join-Path $env:LOCALAPPDATA 'Microsoft\WindowsApps\winget.exe'
     if (Test-Path -LiteralPath $alias) { return $alias }
+    # Newly repaired App Installer may not have exposed its PATH alias yet.
+    if (Get-Command Get-AppxPackage -ErrorAction SilentlyContinue) {
+        foreach ($package in @(Get-AppxPackage -Name Microsoft.DesktopAppInstaller -ErrorAction SilentlyContinue | Sort-Object Version -Descending)) {
+            if (-not $package.InstallLocation) { continue }
+            $candidate=Join-Path $package.InstallLocation 'winget.exe'
+            if (Test-Path -LiteralPath $candidate -PathType Leaf) { return $candidate }
+        }
+    }
     return $null
 }
 
@@ -168,6 +176,20 @@ function Invoke-AppInstallation {
     $plan=@(Get-AppInstallPlan $Ids)
     if (-not $PSCmdlet.ShouldProcess(($plan.Name -join ', '),'Install selected applications and dependencies')) { return }
     $results=New-Object 'System.Collections.Generic.List[object]'
+    $wingetBootstrapError=''
+    if (@($plan | Where-Object Provider -eq 'Winget').Count -and -not (Get-AppWingetPath)) {
+        Write-Ui (Get-InstallText WingetAuto) -ForegroundColor Cyan
+        try {
+            Install-AppWinget -ErrorAction Stop
+            if (-not (Get-AppWingetPath)) { throw (Get-InstallText NeedWinget) }
+            $check=Invoke-AppWinget @('--version')
+            if ($check.ExitCode -ne 0) { throw (Get-InstallText NativeExit @($check.ExitCode)) }
+            Write-Ui (Get-InstallText BootstrapDone) -ForegroundColor Green
+        } catch {
+            $wingetBootstrapError=Get-InstallText BootstrapFailed @($_.Exception.Message)
+            Write-Host $wingetBootstrapError -ForegroundColor Yellow
+        }
+    }
     $states=@{}; $index=0
     foreach ($app in $plan) {
         $index++
@@ -183,6 +205,7 @@ function Invoke-AppInstallation {
             if ($app.PSObject.Properties['MinBuild'] -and [Environment]::OSVersion.Version.Build -lt $app.MinBuild) { throw (Get-InstallText UnsupportedWindows) }
             if ($app.Provider -eq 'Winget') {
                 $source=$app.Source+':'+$app.PackageId
+                if ($wingetBootstrapError) { throw $wingetBootstrapError }
                 if (Test-AppWingetInstalled $app) { $status='AlreadyInstalled' }
                 else {
                     $outcome=Invoke-AppWinget @('install','--id',$app.PackageId,'--exact','--source',$app.Source,'--silent','--accept-package-agreements','--accept-source-agreements','--disable-interactivity')
