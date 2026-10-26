@@ -41,6 +41,19 @@ function Invoke-DefenderFeatureRemoval {
     [pscustomobject]@{ Platform=$platform; Status=$status; RestartRequired=$restart; Remaining=$remaining }
 }
 
+function Get-ExperimentalSecurityState {
+    $services = @('WinDefend','WdNisSvc','WdFilter','WdBoot','WdNisDrv','SecurityHealthService','wscsvc','Sense')
+    $remaining = @($services | Where-Object { Test-Path -LiteralPath "HKLM:\SYSTEM\CurrentControlSet\Services\$_" })
+    $packages = @(Get-AppxPackage -AllUsers -ErrorAction Stop | Where-Object { $_.Name -in @('Microsoft.Windows.SecHealthUI','Microsoft.SecHealthUI') } | Select-Object -ExpandProperty PackageFullName)
+    [pscustomobject]@{
+        RemainingServiceKeys=$remaining; RemainingSecurityAppPackages=$packages
+        EnableLUA=(Get-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' -Name EnableLUA -ErrorAction Stop).EnableLUA
+        SmartScreen=(Get-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer' -Name SmartScreenEnabled -ErrorAction SilentlyContinue | Select-Object -ExpandProperty SmartScreenEnabled -ErrorAction SilentlyContinue)
+        DefenderDirectoryPresent=(Test-Path -LiteralPath (Join-Path $env:ProgramFiles 'Windows Defender'))
+        SmartScreenFilePresent=(Test-Path -LiteralPath (Join-Path $env:SystemRoot 'System32\smartscreen.exe'))
+    }
+}
+
 function Show-DefenderMenu {
     try {
         Clear-Host
@@ -50,6 +63,21 @@ function Show-DefenderMenu {
         Write-Host "  Система: $($platform.Caption)"
         Write-Host "  Семейство: $($platform.Family) | Сборка: $($platform.Build)"
         Write-Host "  Редакция: $($platform.Edition) | LTSC/LTSB: $($platform.LTSC)"
+        Write-Host "`n  E = экспериментальное удаление Defender + Security UI, отключение UAC/SmartScreen" -ForegroundColor Yellow
+        Write-Host '  V = проверить текущее состояние   S = штатное удаление на Server   Enter = назад'
+        $choice = (Read-Host '  Команда').Trim().ToUpperInvariant()
+        if ($choice -eq 'V') { Get-ExperimentalSecurityState | Format-List | Out-Host; return }
+        if ($choice -eq 'E') {
+            Write-Host '  Используются включённые исходники ionuttbara/windows-defender-remover.' -ForegroundColor Yellow
+            Write-Host '  Также меняются VBS, mitigation-политики и связанные защитные компоненты из исходника.'
+            Write-Host '  Операция необратима без резервной копии/переустановки. Сделай образ системы.'
+            Write-Host '  Автоперезагрузки нет. LTSC 2019/2021 допускаются, но на них не выполнен runtime-тест.'
+            if ((Read-Host '  Для запуска введи REMOVE SECURITY') -ceq 'REMOVE SECURITY') {
+                & (Join-Path $PSScriptRoot 'Experimental.SecurityRemoval.ps1') -Apply
+            }
+            return
+        }
+        if ($choice -ne 'S') { return }
         Write-Host "`n  $($platform.Reason)" -ForegroundColor Cyan
         if (-not $platform.Supported) {
             Write-Host '  Удаление для этой системы недоступно. Изменений не будет.' -ForegroundColor Yellow

@@ -1,0 +1,4 @@
+# Keep pinned asset bytes and PowerShell UTF-8 BOMs stable across checkouts.
+*.ps1 -text
+third_party/** -text
+*.zip binary
